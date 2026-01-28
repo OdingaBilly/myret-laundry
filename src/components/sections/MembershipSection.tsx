@@ -18,7 +18,7 @@ const tiers = [
   },
   {
     name: "Silver",
-    price: "$19",
+    price: "KES 1,900",
     period: "/month",
     description: "For regular users",
     features: [
@@ -33,7 +33,7 @@ const tiers = [
   },
   {
     name: "Gold",
-    price: "$39",
+    price: "KES 3,900",
     period: "/month",
     description: "Maximum value",
     features: [
@@ -49,7 +49,7 @@ const tiers = [
   },
   {
     name: "Platinum",
-    price: "$79",
+    price: "KES 7,900",
     period: "/month",
     description: "Ultimate luxury experience",
     features: [
@@ -67,28 +67,29 @@ const tiers = [
 
 export function MembershipSection() {
   return (
-    <section id="membership" className="py-24 relative">
-      <div className="container mx-auto px-6">
+    <section id="membership" className="py-12 md:py-24 relative bg-muted/30">
+      <div className="container mx-auto px-4 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-100px" }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10 md:mb-16"
         >
-          <span className="text-primary text-sm font-semibold tracking-wider uppercase mb-4 block">
+          <span className="text-primary text-xs md:text-sm font-semibold tracking-wider uppercase mb-3 md:mb-4 block">
             Membership
           </span>
-          <h2 className="text-4xl sm:text-5xl font-bold text-foreground mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 md:mb-6">
             Join the Club
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+          <p className="text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto px-4">
             Unlock exclusive benefits and elevate your garment care experience 
             with our membership tiers.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+        {/* Mobile: Horizontal scroll, Desktop: Grid */}
+        <div className="flex md:grid md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 overflow-x-auto md:overflow-visible pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory md:snap-none">
           {tiers.map((tier, index) => (
             <motion.div
               key={tier.name}
@@ -96,14 +97,14 @@ export function MembershipSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
-              className={`relative rounded-2xl p-6 ${
+              className={`relative rounded-2xl p-5 md:p-6 min-w-[280px] md:min-w-0 snap-center ${
                 tier.popular
-                  ? "glass-card border-primary/50"
+                  ? "glass-card border-primary/50 ring-2 ring-primary/20"
                   : "glass-card"
               }`}
             >
               {tier.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-primary to-secondary text-xs font-semibold text-primary-foreground flex items-center gap-1">
+                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-primary to-accent text-xs font-semibold text-primary-foreground flex items-center gap-1">
                   <Star className="w-3 h-3" />
                   Most Popular
                 </div>
@@ -111,34 +112,34 @@ export function MembershipSection() {
 
               {/* Tier badge */}
               <div
-                className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tier.accent} flex items-center justify-center mb-6`}
+                className={`w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br ${tier.accent} flex items-center justify-center mb-4 md:mb-6`}
               >
-                <span className="text-lg font-bold text-white">
+                <span className="text-base md:text-lg font-bold text-white">
                   {tier.name[0]}
                 </span>
               </div>
 
-              <h3 className="text-2xl font-bold text-foreground mb-1">
+              <h3 className="text-xl md:text-2xl font-bold text-foreground mb-1">
                 {tier.name}
               </h3>
-              <p className="text-muted-foreground text-sm mb-4">
+              <p className="text-muted-foreground text-xs md:text-sm mb-3 md:mb-4">
                 {tier.description}
               </p>
 
-              <div className="mb-6">
-                <span className="text-4xl font-bold text-foreground">
+              <div className="mb-4 md:mb-6">
+                <span className="text-2xl md:text-4xl font-bold text-foreground">
                   {tier.price}
                 </span>
                 {tier.period && (
-                  <span className="text-muted-foreground">{tier.period}</span>
+                  <span className="text-muted-foreground text-sm">{tier.period}</span>
                 )}
               </div>
 
-              <ul className="space-y-3 mb-8">
+              <ul className="space-y-2 md:space-y-3 mb-6 md:mb-8">
                 {tier.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-3">
-                    <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span className="text-sm text-muted-foreground">
+                  <li key={feature} className="flex items-start gap-2 md:gap-3">
+                    <Check className="w-4 h-4 md:w-5 md:h-5 text-primary flex-shrink-0 mt-0.5" />
+                    <span className="text-xs md:text-sm text-muted-foreground">
                       {feature}
                     </span>
                   </li>
@@ -148,6 +149,7 @@ export function MembershipSection() {
               <Button
                 variant={tier.popular ? "hero" : "outline"}
                 className="w-full"
+                size="lg"
               >
                 {tier.price === "Free" ? "Get Started" : "Subscribe"}
               </Button>

@@ -7,9 +7,12 @@ export default {
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      padding: "1rem",
       screens: {
-        "2xl": "1400px",
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
       },
     },
     extend: {
@@ -96,8 +99,8 @@ export default {
           "50%": { opacity: "0.5" },
         },
         glow: {
-          "0%, 100%": { boxShadow: "0 0 20px -5px hsla(355, 85%, 52%, 0.3)" },
-          "50%": { boxShadow: "0 0 30px -5px hsla(355, 85%, 52%, 0.5)" },
+          "0%, 100%": { boxShadow: "0 0 20px -5px hsla(265, 83%, 57%, 0.3)" },
+          "50%": { boxShadow: "0 0 30px -5px hsla(265, 83%, 57%, 0.5)" },
         },
       },
       animation: {
