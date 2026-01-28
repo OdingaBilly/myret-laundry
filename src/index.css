@@ -6,64 +6,71 @@
 
 @layer base {
   :root {
-    /* Core brand colors - Deep navy luxury palette */
-    --background: 222 47% 6%;
-    --foreground: 210 40% 98%;
+    /* Stripe-inspired vibrant palette */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
 
-    --card: 222 47% 8%;
-    --card-foreground: 210 40% 98%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
 
-    --popover: 222 47% 8%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
 
-    /* Primary - Crimson Red from logo */
-    --primary: 355 85% 52%;
+    /* Primary - Vibrant Purple from Stripe */
+    --primary: 265 83% 57%;
     --primary-foreground: 0 0% 100%;
 
-    /* Secondary - Royal Blue from logo */
-    --secondary: 220 70% 45%;
-    --secondary-foreground: 210 40% 98%;
+    /* Secondary - Teal/Cyan accent */
+    --secondary: 180 70% 45%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 222 40% 14%;
-    --muted-foreground: 215 20% 55%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 9% 46%;
 
-    --accent: 220 70% 50%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 265 83% 57%;
+    --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 222 30% 18%;
-    --input: 222 30% 15%;
-    --ring: 355 85% 52%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 265 83% 57%;
 
     --radius: 0.75rem;
 
-    /* Premium gradients */
-    --gradient-hero: linear-gradient(135deg, hsl(222, 47%, 6%) 0%, hsl(222, 47%, 11%) 50%, hsl(230, 35%, 15%) 100%);
-    --gradient-accent: linear-gradient(135deg, hsl(355, 85%, 52%) 0%, hsl(220, 70%, 45%) 100%);
-    --gradient-subtle: linear-gradient(135deg, hsl(222, 47%, 10%) 0%, hsl(222, 47%, 14%) 100%);
-    --gradient-glass: linear-gradient(135deg, hsla(220, 70%, 50%, 0.1) 0%, hsla(355, 85%, 52%, 0.05) 100%);
-    --gradient-card: linear-gradient(180deg, hsl(222, 47%, 10%) 0%, hsl(222, 47%, 8%) 100%);
+    /* Premium Stripe-style gradients */
+    --gradient-hero: linear-gradient(135deg, 
+      hsl(280, 70%, 60%) 0%, 
+      hsl(300, 70%, 55%) 20%, 
+      hsl(330, 80%, 55%) 40%, 
+      hsl(25, 90%, 55%) 60%, 
+      hsl(45, 95%, 55%) 80%, 
+      hsl(180, 70%, 50%) 100%
+    );
+    --gradient-accent: linear-gradient(135deg, hsl(265, 83%, 57%) 0%, hsl(280, 75%, 60%) 100%);
+    --gradient-subtle: linear-gradient(135deg, hsl(0, 0%, 100%) 0%, hsl(220, 14%, 98%) 100%);
+    --gradient-glass: linear-gradient(135deg, hsla(265, 83%, 57%, 0.05) 0%, hsla(280, 75%, 60%, 0.02) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0, 0%, 100%) 0%, hsl(220, 14%, 99%) 100%);
 
-    /* Glass morphism */
-    --glass-bg: hsla(222, 47%, 10%, 0.7);
-    --glass-border: hsla(220, 70%, 50%, 0.15);
+    /* Glass morphism - light mode */
+    --glass-bg: hsla(0, 0%, 100%, 0.85);
+    --glass-border: hsla(220, 13%, 91%, 0.8);
 
     /* Shadows */
-    --shadow-soft: 0 4px 24px -4px hsla(222, 47%, 4%, 0.5);
-    --shadow-glow: 0 0 40px -8px hsla(355, 85%, 52%, 0.3);
-    --shadow-card: 0 8px 32px -8px hsla(222, 47%, 4%, 0.6);
+    --shadow-soft: 0 4px 24px -4px hsla(222, 47%, 11%, 0.08);
+    --shadow-glow: 0 0 40px -8px hsla(265, 83%, 57%, 0.25);
+    --shadow-card: 0 8px 32px -8px hsla(222, 47%, 11%, 0.1);
 
     /* Sidebar */
-    --sidebar-background: 222 47% 8%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 355 85% 52%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 265 83% 57%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 70% 45%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 222 30% 18%;
-    --sidebar-ring: 355 85% 52%;
+    --sidebar-accent: 180 70% 45%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 265 83% 57%;
   }
 
   .dark {
@@ -73,27 +80,29 @@
     --card-foreground: 210 40% 98%;
     --popover: 222 47% 8%;
     --popover-foreground: 210 40% 98%;
-    --primary: 355 85% 52%;
+    --primary: 265 83% 60%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 220 70% 45%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 180 70% 45%;
+    --secondary-foreground: 0 0% 100%;
     --muted: 222 40% 14%;
     --muted-foreground: 215 20% 55%;
-    --accent: 220 70% 50%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 265 83% 60%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
     --border: 222 30% 18%;
     --input: 222 30% 15%;
-    --ring: 355 85% 52%;
+    --ring: 265 83% 60%;
+    --glass-bg: hsla(222, 47%, 10%, 0.85);
+    --glass-border: hsla(220, 70%, 50%, 0.15);
     --sidebar-background: 222 47% 8%;
     --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 355 85% 52%;
+    --sidebar-primary: 265 83% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 220 70% 45%;
-    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-accent: 180 70% 45%;
+    --sidebar-accent-foreground: 0 0% 100%;
     --sidebar-border: 222 30% 18%;
-    --sidebar-ring: 355 85% 52%;
+    --sidebar-ring: 265 83% 60%;
   }
 }
 
@@ -109,16 +118,27 @@
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', system-ui, sans-serif;
-    background: var(--gradient-hero);
-    min-height: 100vh;
   }
 }
 
 @layer components {
+  /* Stripe-style gradient background */
+  .hero-gradient-bg {
+    background: var(--gradient-hero);
+    background-size: 200% 200%;
+    animation: gradient-shift 15s ease infinite;
+  }
+
+  @keyframes gradient-shift {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+
   .glass-card {
     background: var(--glass-bg);
     backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-soft);
   }
 
   .gradient-text {
@@ -128,10 +148,32 @@
     background-clip: text;
   }
 
+  /* Stripe-style vibrant gradient text */
+  .gradient-text-vibrant {
+    background: linear-gradient(135deg, 
+      hsl(265, 83%, 57%) 0%, 
+      hsl(300, 70%, 55%) 25%, 
+      hsl(330, 80%, 55%) 50%, 
+      hsl(25, 90%, 55%) 75%,
+      hsl(180, 70%, 50%) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: gradient-text-shift 5s ease infinite;
+  }
+
+  @keyframes gradient-text-shift {
+    0%, 100% { background-position: 0% center; }
+    50% { background-position: 100% center; }
+  }
+
   .gradient-border {
     position: relative;
     background: var(--gradient-card);
     border-radius: var(--radius);
+    box-shadow: var(--shadow-soft);
   }
 
   .gradient-border::before {
@@ -146,26 +188,30 @@
       linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
-    opacity: 0.3;
+    opacity: 0.2;
     transition: opacity 0.3s ease;
   }
 
   .gradient-border:hover::before {
-    opacity: 0.6;
+    opacity: 0.5;
   }
 
   .hero-glow {
     position: absolute;
-    width: 600px;
-    height: 600px;
+    width: 400px;
+    height: 400px;
     border-radius: 50%;
-    background: radial-gradient(circle, hsla(355, 85%, 52%, 0.15) 0%, transparent 70%);
-    filter: blur(80px);
+    background: radial-gradient(circle, hsla(265, 83%, 57%, 0.2) 0%, transparent 70%);
+    filter: blur(60px);
     pointer-events: none;
   }
 
-  .hero-glow-blue {
-    background: radial-gradient(circle, hsla(220, 70%, 50%, 0.15) 0%, transparent 70%);
+  .hero-glow-secondary {
+    background: radial-gradient(circle, hsla(330, 80%, 55%, 0.2) 0%, transparent 70%);
+  }
+
+  .hero-glow-tertiary {
+    background: radial-gradient(circle, hsla(45, 95%, 55%, 0.15) 0%, transparent 70%);
   }
 }
 

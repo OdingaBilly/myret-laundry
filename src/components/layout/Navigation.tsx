@@ -21,22 +21,22 @@ export function Navigation() {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="fixed top-0 left-0 right-0 z-50 glass-card"
     >
-      <div className="container mx-auto px-6 py-4">
+      <div className="container mx-auto px-4 md:px-6 py-3 md:py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <a href="/" className="flex items-center gap-3">
+          <a href="/" className="flex items-center gap-2 md:gap-3">
             <img
               src={logo}
               alt="MyRet Laundry"
-              className="h-10 w-auto rounded-lg"
+              className="h-8 md:h-10 w-auto rounded-lg"
             />
-            <span className="text-xl font-bold text-foreground hidden sm:block">
+            <span className="text-lg md:text-xl font-bold text-foreground">
               MyRet
             </span>
           </a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-6 lg:gap-8">
             {navLinks.map((link) => (
               <a
                 key={link.label}
@@ -49,7 +49,7 @@ export function Navigation() {
           </div>
 
           {/* Desktop CTA */}
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-3 lg:gap-4">
             <Button variant="ghost" size="sm">
               Sign In
             </Button>
@@ -62,8 +62,9 @@ export function Navigation() {
           <button
             className="md:hidden p-2 text-foreground"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
           >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
           </button>
         </div>
 
@@ -77,7 +78,7 @@ export function Navigation() {
               transition={{ duration: 0.3 }}
               className="md:hidden overflow-hidden"
             >
-              <div className="py-4 flex flex-col gap-4">
+              <div className="py-4 flex flex-col gap-3">
                 {navLinks.map((link) => (
                   <a
                     key={link.label}
@@ -88,7 +89,7 @@ export function Navigation() {
                     {link.label}
                   </a>
                 ))}
-                <div className="flex flex-col gap-3 pt-4 border-t border-border">
+                <div className="flex flex-col gap-2 pt-4 border-t border-border">
                   <Button variant="ghost" className="w-full justify-center">
                     Sign In
                   </Button>
