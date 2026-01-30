@@ -109,15 +109,19 @@
 @layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
 
   html {
     scroll-behavior: smooth;
+    overflow-x: hidden;
   }
 
   body {
     @apply bg-background text-foreground antialiased;
     font-family: 'Inter', system-ui, sans-serif;
+    overflow-x: hidden;
+    width: 100%;
   }
 }
 
@@ -198,8 +202,6 @@
 
   .hero-glow {
     position: absolute;
-    width: 400px;
-    height: 400px;
     border-radius: 50%;
     background: radial-gradient(circle, hsla(265, 83%, 57%, 0.2) 0%, transparent 70%);
     filter: blur(60px);
@@ -212,6 +214,24 @@
 
   .hero-glow-tertiary {
     background: radial-gradient(circle, hsla(45, 95%, 55%, 0.15) 0%, transparent 70%);
+  }
+
+  /* Section transitions */
+  .section-transition {
+    @apply relative;
+  }
+
+  .section-transition::before {
+    content: '';
+    @apply absolute inset-x-0 -top-16 h-32 pointer-events-none;
+    background: linear-gradient(to bottom, transparent, hsl(var(--background)));
+  }
+}
+
+/* Smooth transitions for all elements */
+@layer utilities {
+  .smooth-transition {
+    @apply transition-all duration-500 ease-out;
   }
 }
 

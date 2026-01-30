@@ -67,79 +67,78 @@ const tiers = [
 
 export function MembershipSection() {
   return (
-    <section id="membership" className="py-12 md:py-24 relative bg-muted/30">
+    <section id="membership" className="py-12 md:py-20 lg:py-24 relative bg-muted/30 overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-100px" }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-10 md:mb-16"
+          viewport={{ once: true, margin: "-50px" }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-8 md:mb-14"
         >
-          <span className="text-primary text-xs md:text-sm font-semibold tracking-wider uppercase mb-3 md:mb-4 block">
+          <span className="text-primary text-xs md:text-sm font-semibold tracking-wider uppercase mb-2 md:mb-3 block">
             Membership
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-4 md:mb-6">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-3 md:mb-5">
             Join the Club
           </h2>
-          <p className="text-muted-foreground text-sm md:text-lg max-w-2xl mx-auto px-4">
-            Unlock exclusive benefits and elevate your garment care experience 
-            with our membership tiers.
+          <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
+            Unlock exclusive benefits and elevate your garment care experience.
           </p>
         </motion.div>
 
-        {/* Mobile: Horizontal scroll, Desktop: Grid */}
-        <div className="flex md:grid md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 overflow-x-auto md:overflow-visible pb-4 md:pb-0 -mx-4 px-4 md:mx-0 md:px-0 snap-x snap-mandatory md:snap-none">
+        {/* Mobile: 2 column grid, Desktop: 4 column grid */}
+        <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 md:gap-5">
           {tiers.map((tier, index) => (
             <motion.div
               key={tier.name}
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.6, delay: index * 0.1 }}
-              className={`relative rounded-2xl p-5 md:p-6 min-w-[280px] md:min-w-0 snap-center ${
+              viewport={{ once: true, margin: "-30px" }}
+              transition={{ duration: 0.5, delay: index * 0.08 }}
+              className={`relative rounded-xl md:rounded-2xl p-3 md:p-5 ${
                 tier.popular
-                  ? "glass-card border-primary/50 ring-2 ring-primary/20"
+                  ? "glass-card border-primary/50 ring-1 md:ring-2 ring-primary/20"
                   : "glass-card"
               }`}
             >
               {tier.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-gradient-to-r from-primary to-accent text-xs font-semibold text-primary-foreground flex items-center gap-1">
-                  <Star className="w-3 h-3" />
-                  Most Popular
+                <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2 py-0.5 md:px-3 md:py-1 rounded-full bg-gradient-to-r from-primary to-accent text-[10px] md:text-xs font-semibold text-primary-foreground flex items-center gap-1 whitespace-nowrap">
+                  <Star className="w-2.5 h-2.5 md:w-3 md:h-3" />
+                  Popular
                 </div>
               )}
 
               {/* Tier badge */}
               <div
-                className={`w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br ${tier.accent} flex items-center justify-center mb-4 md:mb-6`}
+                className={`w-8 h-8 md:w-10 md:h-10 rounded-lg md:rounded-xl bg-gradient-to-br ${tier.accent} flex items-center justify-center mb-3 md:mb-4`}
               >
-                <span className="text-base md:text-lg font-bold text-white">
+                <span className="text-sm md:text-base font-bold text-white">
                   {tier.name[0]}
                 </span>
               </div>
 
-              <h3 className="text-xl md:text-2xl font-bold text-foreground mb-1">
+              <h3 className="text-base md:text-xl font-bold text-foreground mb-0.5">
                 {tier.name}
               </h3>
-              <p className="text-muted-foreground text-xs md:text-sm mb-3 md:mb-4">
+              <p className="text-muted-foreground text-[10px] md:text-xs mb-2 md:mb-3">
                 {tier.description}
               </p>
 
-              <div className="mb-4 md:mb-6">
-                <span className="text-2xl md:text-4xl font-bold text-foreground">
+              <div className="mb-3 md:mb-5">
+                <span className="text-lg md:text-2xl font-bold text-foreground">
                   {tier.price}
                 </span>
                 {tier.period && (
-                  <span className="text-muted-foreground text-sm">{tier.period}</span>
+                  <span className="text-muted-foreground text-[10px] md:text-xs">{tier.period}</span>
                 )}
               </div>
 
-              <ul className="space-y-2 md:space-y-3 mb-6 md:mb-8">
-                {tier.features.map((feature) => (
-                  <li key={feature} className="flex items-start gap-2 md:gap-3">
-                    <Check className="w-4 h-4 md:w-5 md:h-5 text-primary flex-shrink-0 mt-0.5" />
-                    <span className="text-xs md:text-sm text-muted-foreground">
+              <ul className="space-y-1.5 md:space-y-2 mb-4 md:mb-6">
+                {tier.features.slice(0, 4).map((feature) => (
+                  <li key={feature} className="flex items-start gap-1.5 md:gap-2">
+                    <Check className="w-3.5 h-3.5 md:w-4 md:h-4 text-primary flex-shrink-0 mt-0.5" />
+                    <span className="text-[10px] md:text-xs text-muted-foreground line-clamp-2">
                       {feature}
                     </span>
                   </li>
@@ -148,10 +147,10 @@ export function MembershipSection() {
 
               <Button
                 variant={tier.popular ? "hero" : "outline"}
-                className="w-full"
-                size="lg"
+                className="w-full text-xs md:text-sm h-8 md:h-10"
+                size="sm"
               >
-                {tier.price === "Free" ? "Get Started" : "Subscribe"}
+                {tier.price === "Free" ? "Start" : "Subscribe"}
               </Button>
             </motion.div>
           ))}
