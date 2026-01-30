@@ -60,7 +60,7 @@ export function Navigation() {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-foreground"
+            className="md:hidden p-2 text-foreground relative z-50"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -68,35 +68,52 @@ export function Navigation() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
-        <AnimatePresence>
+        {/* Mobile Menu with enhanced animations */}
+        <AnimatePresence mode="wait">
           {mobileMenuOpen && (
             <motion.div
-              initial={{ height: 0, opacity: 0 }}
-              animate={{ height: "auto", opacity: 1 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.3 }}
-              className="md:hidden overflow-hidden"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="md:hidden overflow-hidden relative"
             >
-              <div className="py-4 flex flex-col gap-3">
-                {navLinks.map((link) => (
-                  <a
+              {/* Blurred background overlay */}
+              <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-secondary/5 to-primary/5 backdrop-blur-md -z-10" />
+              
+              <div className="py-5 flex flex-col gap-2">
+                {navLinks.map((link, index) => (
+                  <motion.a
                     key={link.label}
                     href={link.href}
-                    className="text-muted-foreground hover:text-foreground transition-colors duration-300 text-base font-medium py-2"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    transition={{ 
+                      duration: 0.3, 
+                      delay: index * 0.08,
+                      ease: "easeOut"
+                    }}
+                    className="text-foreground hover:text-primary transition-colors duration-300 text-base font-medium py-2.5 px-3 rounded-lg hover:bg-muted/50"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {link.label}
-                  </a>
+                  </motion.a>
                 ))}
-                <div className="flex flex-col gap-2 pt-4 border-t border-border">
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.3, delay: 0.35 }}
+                  className="flex flex-col gap-2 pt-4 mt-2 border-t border-border/50"
+                >
                   <Button variant="ghost" className="w-full justify-center">
                     Sign In
                   </Button>
                   <Button variant="hero" className="w-full justify-center">
                     Get Started
                   </Button>
-                </div>
+                </motion.div>
               </div>
             </motion.div>
           )}
