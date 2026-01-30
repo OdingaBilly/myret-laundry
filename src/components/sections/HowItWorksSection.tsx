@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Calendar, Package, Truck, CheckCircle } from "lucide-react";
+import laundryColorfulTowels from "@/assets/laundry-colorful-towels.jpg";
 
 const steps = [
   {
@@ -31,27 +32,48 @@ const steps = [
 export function HowItWorksSection() {
   return (
     <section id="how-it-works" className="py-12 md:py-20 lg:py-24 relative overflow-hidden bg-muted/30">
-      {/* Subtle background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-muted/5 to-transparent pointer-events-none" />
+      {/* Animated transition gradient from previous section */}
+      <div className="absolute inset-x-0 -top-1 h-24 md:h-32 transition-gradient-animated pointer-events-none rotate-180" />
 
       <div className="container mx-auto px-4 md:px-6 relative">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-8 md:mb-14"
-        >
-          <span className="text-secondary text-xs md:text-sm font-semibold tracking-wider uppercase mb-2 md:mb-3 block">
-            How It Works
-          </span>
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-3 md:mb-5">
-            Effortless from Start to Finish
-          </h2>
-          <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            We've designed a seamless experience that respects your time.
-          </p>
-        </motion.div>
+        {/* Section header with image - Image left, Text right (alternating pattern) */}
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center mb-8 md:mb-14">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+            className="relative order-2 lg:order-1"
+          >
+            <div className="relative rounded-xl md:rounded-2xl overflow-hidden aspect-[4/3] shadow-xl">
+              <img
+                src={laundryColorfulTowels}
+                alt="Colorful fresh laundry"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+            </div>
+            <div className="absolute -inset-3 bg-gradient-to-r from-secondary/10 to-primary/10 rounded-2xl -z-10 blur-xl" />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="order-1 lg:order-2"
+          >
+            <span className="text-secondary text-xs md:text-sm font-semibold tracking-wider uppercase mb-2 md:mb-3 block">
+              How It Works
+            </span>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-3 md:mb-5">
+              Effortless from Start to Finish
+            </h2>
+            <p className="text-muted-foreground text-sm md:text-base max-w-xl">
+              We've designed a seamless experience that respects your time.
+            </p>
+          </motion.div>
+        </div>
 
         <div className="relative">
           {/* Mobile: 2 column grid, Desktop: 4 column */}
@@ -86,6 +108,9 @@ export function HowItWorksSection() {
           </div>
         </div>
       </div>
+
+      {/* Bottom transition gradient */}
+      <div className="absolute inset-x-0 -bottom-1 h-24 md:h-32 transition-gradient-animated pointer-events-none" />
     </section>
   );
 }

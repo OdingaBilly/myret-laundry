@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { Check, Star } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import laundryWaterSplash from "@/assets/laundry-water-splash.jpg";
 
 const tiers = [
   {
@@ -68,24 +69,47 @@ const tiers = [
 export function MembershipSection() {
   return (
     <section id="membership" className="py-12 md:py-20 lg:py-24 relative bg-muted/30 overflow-hidden">
+      {/* Animated transition from previous section */}
+      <div className="absolute inset-x-0 -top-1 h-24 md:h-32 transition-gradient-animated pointer-events-none rotate-180" />
+
       <div className="container mx-auto px-4 md:px-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-8 md:mb-14"
-        >
-          <span className="text-primary text-xs md:text-sm font-semibold tracking-wider uppercase mb-2 md:mb-3 block">
-            Membership
-          </span>
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-3 md:mb-5">
-            Join the Club
-          </h2>
-          <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Unlock exclusive benefits and elevate your garment care experience.
-          </p>
-        </motion.div>
+        {/* Section header with image - Text left, Image right (alternating pattern) */}
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12 items-center mb-8 md:mb-14">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5 }}
+          >
+            <span className="text-primary text-xs md:text-sm font-semibold tracking-wider uppercase mb-2 md:mb-3 block">
+              Membership
+            </span>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-foreground mb-3 md:mb-5">
+              Join the Club
+            </h2>
+            <p className="text-muted-foreground text-sm md:text-base max-w-xl">
+              Unlock exclusive benefits and elevate your garment care experience.
+            </p>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="relative"
+          >
+            <div className="relative rounded-xl md:rounded-2xl overflow-hidden aspect-[4/3] shadow-xl">
+              <img
+                src={laundryWaterSplash}
+                alt="Premium laundry care"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
+            </div>
+            <div className="absolute -inset-3 bg-gradient-to-r from-primary/10 to-secondary/10 rounded-2xl -z-10 blur-xl" />
+          </motion.div>
+        </div>
 
         {/* Mobile: 2 column grid, Desktop: 4 column grid */}
         <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 md:gap-5">
@@ -156,6 +180,9 @@ export function MembershipSection() {
           ))}
         </div>
       </div>
+
+      {/* Bottom transition gradient */}
+      <div className="absolute inset-x-0 -bottom-1 h-24 md:h-32 transition-gradient-animated pointer-events-none" />
     </section>
   );
 }
