@@ -32,8 +32,6 @@ const steps = [
 export function HowItWorksSection() {
   return (
     <section id="how-it-works" className="py-12 md:py-20 lg:py-24 relative overflow-hidden bg-muted/30">
-      {/* Animated transition gradient from previous section */}
-      <div className="absolute inset-x-0 -top-1 h-24 md:h-32 transition-gradient-animated pointer-events-none rotate-180" />
 
       <div className="container mx-auto px-4 md:px-6 relative">
         {/* Section header with image - Image left, Text right (alternating pattern) */}
@@ -108,9 +106,6 @@ export function HowItWorksSection() {
           </div>
         </div>
       </div>
-
-      {/* Bottom transition gradient */}
-      <div className="absolute inset-x-0 -bottom-1 h-24 md:h-32 transition-gradient-animated pointer-events-none" />
     </section>
   );
 }

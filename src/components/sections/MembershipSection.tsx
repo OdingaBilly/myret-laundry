@@ -69,8 +69,6 @@ const tiers = [
 export function MembershipSection() {
   return (
     <section id="membership" className="py-12 md:py-20 lg:py-24 relative bg-muted/30 overflow-hidden">
-      {/* Animated transition from previous section */}
-      <div className="absolute inset-x-0 -top-1 h-24 md:h-32 transition-gradient-animated pointer-events-none rotate-180" />
 
       <div className="container mx-auto px-4 md:px-6">
         {/* Section header with image - Text left, Image right (alternating pattern) */}
@@ -180,9 +178,6 @@ export function MembershipSection() {
           ))}
         </div>
       </div>
-
-      {/* Bottom transition gradient */}
-      <div className="absolute inset-x-0 -bottom-1 h-24 md:h-32 transition-gradient-animated pointer-events-none" />
     </section>
   );
 }
