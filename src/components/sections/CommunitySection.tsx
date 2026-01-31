@@ -28,8 +28,6 @@ const features = [
 export function CommunitySection() {
   return (
     <section id="community" className="py-12 md:py-20 lg:py-24 relative overflow-hidden">
-      {/* Animated transition from previous section */}
-      <div className="absolute inset-x-0 -top-1 h-24 md:h-32 transition-gradient-animated pointer-events-none rotate-180" />
       
       <div className="absolute inset-0 bg-gradient-to-t from-muted/20 to-transparent pointer-events-none" />
 
@@ -187,9 +185,6 @@ export function CommunitySection() {
           </div>
         </motion.div>
       </div>
-
-      {/* Bottom transition gradient to footer */}
-      <div className="absolute inset-x-0 -bottom-1 h-24 md:h-32 transition-gradient-animated pointer-events-none" />
     </section>
   );
 }

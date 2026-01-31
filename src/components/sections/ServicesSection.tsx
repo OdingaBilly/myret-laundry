@@ -79,8 +79,6 @@ const itemVariants = {
 export function ServicesSection() {
   return (
     <section id="services" className="py-12 md:py-20 lg:py-24 relative bg-background overflow-hidden">
-      {/* Animated color gradient transition from hero */}
-      <div className="absolute inset-x-0 -top-1 h-32 md:h-48 transition-gradient-animated pointer-events-none" />
       
       <div className="container mx-auto px-4 md:px-6">
         {/* Section header with image - Text left, Image right */}
