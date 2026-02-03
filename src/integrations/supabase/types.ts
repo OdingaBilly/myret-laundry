@@ -14,16 +14,199 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      order_status_history: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          notes: string | null
+          order_id: string
+          status: Database["public"]["Enums"]["order_status"]
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          order_id: string
+          status: Database["public"]["Enums"]["order_status"]
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          notes?: string | null
+          order_id?: string
+          status?: Database["public"]["Enums"]["order_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_status_history_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      orders: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          customer_address: string
+          customer_name: string
+          customer_phone: string
+          customer_photo_url: string | null
+          delivery_option: Database["public"]["Enums"]["delivery_option"]
+          estimated_price: number | null
+          final_price: number | null
+          id: string
+          laundry_notes: string | null
+          picked_up_at: string | null
+          pickup_date: string | null
+          pickup_time_slot: string | null
+          return_date: string
+          return_option: Database["public"]["Enums"]["return_option"]
+          service_type: Database["public"]["Enums"]["laundry_service"]
+          special_instructions: string | null
+          status: Database["public"]["Enums"]["order_status"]
+          store_photo_url: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          customer_address: string
+          customer_name: string
+          customer_phone: string
+          customer_photo_url?: string | null
+          delivery_option: Database["public"]["Enums"]["delivery_option"]
+          estimated_price?: number | null
+          final_price?: number | null
+          id?: string
+          laundry_notes?: string | null
+          picked_up_at?: string | null
+          pickup_date?: string | null
+          pickup_time_slot?: string | null
+          return_date: string
+          return_option: Database["public"]["Enums"]["return_option"]
+          service_type: Database["public"]["Enums"]["laundry_service"]
+          special_instructions?: string | null
+          status?: Database["public"]["Enums"]["order_status"]
+          store_photo_url?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          customer_address?: string
+          customer_name?: string
+          customer_phone?: string
+          customer_photo_url?: string | null
+          delivery_option?: Database["public"]["Enums"]["delivery_option"]
+          estimated_price?: number | null
+          final_price?: number | null
+          id?: string
+          laundry_notes?: string | null
+          picked_up_at?: string | null
+          pickup_date?: string | null
+          pickup_time_slot?: string | null
+          return_date?: string
+          return_option?: Database["public"]["Enums"]["return_option"]
+          service_type?: Database["public"]["Enums"]["laundry_service"]
+          special_instructions?: string | null
+          status?: Database["public"]["Enums"]["order_status"]
+          store_photo_url?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          address: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      delivery_option: "self_deliver" | "pickup_requested"
+      laundry_service:
+        | "dry-cleaning"
+        | "wash-and-fold"
+        | "express-service"
+        | "stain-removal"
+        | "eco-care"
+        | "vip-treatment"
+      order_status:
+        | "pending"
+        | "confirmed"
+        | "picked_up"
+        | "at_store"
+        | "in_progress"
+        | "ready"
+        | "out_for_delivery"
+        | "delivered"
+        | "completed"
+        | "cancelled"
+      return_option: "self_pickup" | "delivery_requested"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +333,30 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      delivery_option: ["self_deliver", "pickup_requested"],
+      laundry_service: [
+        "dry-cleaning",
+        "wash-and-fold",
+        "express-service",
+        "stain-removal",
+        "eco-care",
+        "vip-treatment",
+      ],
+      order_status: [
+        "pending",
+        "confirmed",
+        "picked_up",
+        "at_store",
+        "in_progress",
+        "ready",
+        "out_for_delivery",
+        "delivered",
+        "completed",
+        "cancelled",
+      ],
+      return_option: ["self_pickup", "delivery_requested"],
+    },
   },
 } as const

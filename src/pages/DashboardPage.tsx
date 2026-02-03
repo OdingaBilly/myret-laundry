@@ -1,0 +1,295 @@
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { 
+  Package, Plus, Clock, CheckCircle2, Truck, 
+  LogOut, User, Settings, ChevronRight, Image
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Navigation } from '@/components/layout/Navigation';
+import { OrderTracker } from '@/components/orders/OrderTracker';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+import { useToast } from '@/hooks/use-toast';
+import type { Database } from '@/integrations/supabase/types';
+
+type Order = Database['public']['Tables']['orders']['Row'];
+
+const serviceLabels: Record<string, string> = {
+  'dry-cleaning': 'Dry Cleaning',
+  'wash-and-fold': 'Wash & Fold',
+  'express-service': 'Express Service',
+  'stain-removal': 'Stain Removal',
+  'eco-care': 'Eco Care',
+  'vip-treatment': 'VIP Treatment',
+};
+
+const statusColors: Record<string, string> = {
+  pending: 'bg-yellow-100 text-yellow-800',
+  confirmed: 'bg-blue-100 text-blue-800',
+  picked_up: 'bg-indigo-100 text-indigo-800',
+  at_store: 'bg-purple-100 text-purple-800',
+  in_progress: 'bg-pink-100 text-pink-800',
+  ready: 'bg-green-100 text-green-800',
+  out_for_delivery: 'bg-orange-100 text-orange-800',
+  delivered: 'bg-teal-100 text-teal-800',
+  completed: 'bg-emerald-100 text-emerald-800',
+  cancelled: 'bg-red-100 text-red-800',
+};
+
+export default function DashboardPage() {
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const navigate = useNavigate();
+  const { user, signOut, isAdmin } = useAuth();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
+
+    fetchOrders();
+
+    // Subscribe to realtime updates
+    const channel = supabase
+      .channel('orders-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'orders',
+          filter: `user_id=eq.${user.id}`,
+        },
+        () => {
+          fetchOrders();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [user, navigate]);
+
+  const fetchOrders = async () => {
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to fetch orders',
+        variant: 'destructive',
+      });
+    } else {
+      setOrders(data || []);
+    }
+    setLoading(false);
+  };
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+
+  const activeOrders = orders.filter(o => !['completed', 'cancelled'].includes(o.status));
+  const completedOrders = orders.filter(o => ['completed', 'cancelled'].includes(o.status));
+
+  return (
+    <div className="min-h-screen bg-background">
+      <Navigation />
+      
+      <div className="pt-20 pb-12 px-4">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h1 className="text-2xl font-bold text-foreground">My Orders</h1>
+              <p className="text-sm text-muted-foreground">
+                Track and manage your laundry orders
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              {isAdmin && (
+                <Button variant="outline" size="sm" asChild>
+                  <Link to="/admin">Admin Panel</Link>
+                </Button>
+              )}
+              <Button variant="hero" size="sm" asChild>
+                <Link to="/order/new">
+                  <Plus className="w-4 h-4 mr-1" />
+                  New Order
+                </Link>
+              </Button>
+            </div>
+          </div>
+
+          {/* User info card */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="glass-card p-4 rounded-xl mb-6 flex items-center justify-between"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                <User className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <p className="font-medium text-foreground">{user?.email}</p>
+                <p className="text-xs text-muted-foreground">
+                  {orders.length} total orders
+                </p>
+              </div>
+            </div>
+            <Button variant="ghost" size="sm" onClick={handleSignOut}>
+              <LogOut className="w-4 h-4 mr-1" />
+              Sign Out
+            </Button>
+          </motion.div>
+
+          {/* Active Orders */}
+          <div className="mb-8">
+            <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+              <Clock className="w-5 h-5 text-primary" />
+              Active Orders ({activeOrders.length})
+            </h2>
+
+            {loading ? (
+              <div className="space-y-4">
+                {[1, 2].map(i => (
+                  <div key={i} className="glass-card p-4 rounded-xl animate-pulse">
+                    <div className="h-20 bg-muted rounded" />
+                  </div>
+                ))}
+              </div>
+            ) : activeOrders.length === 0 ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="glass-card p-8 rounded-xl text-center"
+              >
+                <Package className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
+                <p className="text-muted-foreground mb-4">No active orders</p>
+                <Button variant="hero" asChild>
+                  <Link to="/order/new">Place Your First Order</Link>
+                </Button>
+              </motion.div>
+            ) : (
+              <div className="space-y-4">
+                {activeOrders.map((order, index) => (
+                  <motion.div
+                    key={order.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1 }}
+                    className="glass-card p-4 rounded-xl cursor-pointer hover:shadow-lg transition-shadow"
+                    onClick={() => setSelectedOrder(selectedOrder?.id === order.id ? null : order)}
+                  >
+                    <div className="flex items-start justify-between mb-3">
+                      <div>
+                        <p className="font-medium text-foreground">
+                          {serviceLabels[order.service_type] || order.service_type}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          Order #{order.id.slice(0, 8)}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[order.status]}`}>
+                          {order.status.replace('_', ' ')}
+                        </span>
+                        <ChevronRight className={`w-4 h-4 transition-transform ${selectedOrder?.id === order.id ? 'rotate-90' : ''}`} />
+                      </div>
+                    </div>
+
+                    {selectedOrder?.id === order.id && (
+                      <motion.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: 'auto' }}
+                        exit={{ opacity: 0, height: 0 }}
+                        className="pt-4 border-t border-border"
+                      >
+                        <OrderTracker
+                          status={order.status}
+                          createdAt={order.created_at}
+                          pickedUpAt={order.picked_up_at}
+                          completedAt={order.completed_at}
+                        />
+
+                        <div className="mt-4 grid grid-cols-2 gap-4 text-sm">
+                          <div>
+                            <p className="text-muted-foreground">Return Date</p>
+                            <p className="font-medium">{new Date(order.return_date).toLocaleDateString()}</p>
+                          </div>
+                          <div>
+                            <p className="text-muted-foreground">Return Method</p>
+                            <p className="font-medium">
+                              {order.return_option === 'delivery_requested' ? 'Delivery' : 'Pickup'}
+                            </p>
+                          </div>
+                        </div>
+
+                        {order.store_photo_url && (
+                          <div className="mt-4">
+                            <p className="text-sm text-muted-foreground mb-2">Store Photo</p>
+                            <img
+                              src={order.store_photo_url}
+                              alt="Laundry at store"
+                              className="w-full max-w-xs rounded-lg"
+                            />
+                          </div>
+                        )}
+                      </motion.div>
+                    )}
+                  </motion.div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Completed Orders */}
+          {completedOrders.length > 0 && (
+            <div>
+              <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                <CheckCircle2 className="w-5 h-5 text-green-600" />
+                Past Orders ({completedOrders.length})
+              </h2>
+
+              <div className="space-y-3">
+                {completedOrders.slice(0, 5).map((order) => (
+                  <motion.div
+                    key={order.id}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="glass-card p-3 rounded-xl flex items-center justify-between"
+                  >
+                    <div>
+                      <p className="font-medium text-foreground text-sm">
+                        {serviceLabels[order.service_type]}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {new Date(order.created_at).toLocaleDateString()}
+                      </p>
+                    </div>
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[order.status]}`}>
+                      {order.status}
+                    </span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}

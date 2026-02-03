@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 import packagingBag from "@/assets/packaging-bag-nobg.png";
 import laundryTowels from "@/assets/laundry-folded-towels.jpg";
 
@@ -16,6 +18,8 @@ export function HeroSection() {
   const [currentTextIndex, setCurrentTextIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const currentFullText = typewriterTexts[currentTextIndex];
@@ -42,6 +46,14 @@ export function HeroSection() {
 
     return () => clearTimeout(timeout);
   }, [displayText, isDeleting, currentTextIndex]);
+
+  const handleStartJourney = () => {
+    if (user) {
+      navigate('/order/new');
+    } else {
+      navigate('/auth');
+    }
+  };
 
   return (
     <section className="relative min-h-[80vh] md:min-h-screen flex items-center overflow-hidden pt-20 pb-8 md:pt-24 md:pb-16">
@@ -103,12 +115,23 @@ export function HeroSection() {
               transition={{ delay: 0.4, duration: 0.4 }}
               className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start"
             >
-              <Button variant="hero" size="default" className="w-full sm:w-auto">
-                Start Your Journey
+              <Button 
+                variant="hero" 
+                size="default" 
+                className="w-full sm:w-auto"
+                onClick={handleStartJourney}
+              >
+                <Package className="w-4 h-4 mr-1" />
+                {user ? 'Place Order' : 'Start Your Journey'}
                 <ArrowRight className="w-4 h-4" />
               </Button>
-              <Button variant="heroOutline" size="default" className="w-full sm:w-auto border-white/30 text-white hover:bg-white/10">
-                Explore Services
+              <Button 
+                variant="heroOutline" 
+                size="default" 
+                className="w-full sm:w-auto border-white/30 text-white hover:bg-white/10"
+                asChild
+              >
+                <a href="#services">Explore Services</a>
               </Button>
             </motion.div>
 
