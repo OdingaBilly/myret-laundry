@@ -1,11 +1,17 @@
-import { useParams, Link } from "react-router-dom";
+import { useState } from 'react';
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, Clock, Shield, Sparkles, Star } from "lucide-react";
+import { ArrowLeft, Clock, Shield, Sparkles, Star, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/layout/Navigation";
 import { FooterSection } from "@/components/sections/FooterSection";
+import { LaundryDispatchForm } from "@/components/orders/LaundryDispatchForm";
+import { useAuth } from "@/contexts/AuthContext";
 import laundryWaterSplash from "@/assets/laundry-water-splash.jpg";
 import laundryColorfulTowels from "@/assets/laundry-colorful-towels.jpg";
+import type { Database } from "@/integrations/supabase/types";
+
+type LaundryService = Database['public']['Enums']['laundry_service'];
 
 const servicesData: Record<string, {
   title: string;
@@ -116,6 +122,9 @@ const servicesData: Record<string, {
 
 export default function ServicePage() {
   const { slug } = useParams<{ slug: string }>();
+  const [showOrderForm, setShowOrderForm] = useState(false);
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const service = slug ? servicesData[slug] : null;
 
   if (!service) {
@@ -130,6 +139,14 @@ export default function ServicePage() {
       </div>
     );
   }
+
+  const handleBookNow = () => {
+    if (!user) {
+      navigate('/auth');
+    } else {
+      setShowOrderForm(true);
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -181,7 +198,8 @@ export default function ServicePage() {
                 <span className="text-2xl md:text-3xl font-bold text-white">
                   {service.price}
                 </span>
-                <Button variant="hero" size="lg">
+                <Button variant="hero" size="lg" onClick={handleBookNow}>
+                  <Package className="w-4 h-4 mr-2" />
                   Book Now
                 </Button>
               </div>
@@ -205,6 +223,24 @@ export default function ServicePage() {
           </div>
         </div>
       </section>
+
+      {/* Order Form Section */}
+      {showOrderForm && slug && (
+        <section className="py-12 md:py-16 bg-muted/30">
+          <div className="container mx-auto px-4 md:px-6">
+            <div className="max-w-2xl mx-auto">
+              <LaundryDispatchForm
+                serviceType={slug as LaundryService}
+                serviceName={service.title}
+                onSuccess={() => {
+                  setShowOrderForm(false);
+                  navigate('/dashboard');
+                }}
+              />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Features section */}
       <section className="py-12 md:py-20 bg-background">
@@ -243,8 +279,7 @@ export default function ServicePage() {
       </section>
 
       {/* CTA section */}
-      <section className="py-12 md:py-16 relative overflow-hidden">
-        <div className="absolute inset-0 transition-gradient-animated" />
+      <section className="py-12 md:py-16 relative overflow-hidden bg-muted/30">
         <div className="container mx-auto px-4 md:px-6 relative z-10 text-center">
           <h2 className="text-xl md:text-2xl font-bold text-foreground mb-4">
             Ready to Experience Premium Care?
@@ -252,7 +287,8 @@ export default function ServicePage() {
           <p className="text-muted-foreground mb-6 max-w-md mx-auto text-sm md:text-base">
             Book your first pickup today and see the difference quality makes.
           </p>
-          <Button variant="hero" size="lg">
+          <Button variant="hero" size="lg" onClick={handleBookNow}>
+            <Package className="w-4 h-4 mr-2" />
             Schedule Pickup
           </Button>
         </div>

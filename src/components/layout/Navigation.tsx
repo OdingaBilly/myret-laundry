@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 import logo from "@/assets/logo.jpeg";
 
 const navLinks = [
@@ -13,6 +15,13 @@ const navLinks = [
 
 export function Navigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user, signOut, isAdmin } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   return (
     <motion.nav
@@ -24,7 +33,7 @@ export function Navigation() {
       <div className="container mx-auto px-4 md:px-6 py-3 md:py-4">
         <div className="flex items-center justify-between">
           {/* Logo */}
-          <a href="/" className="flex items-center gap-2 md:gap-3">
+          <Link to="/" className="flex items-center gap-2 md:gap-3">
             <img
               src={logo}
               alt="MyRet Laundry"
@@ -33,7 +42,7 @@ export function Navigation() {
             <span className="text-lg md:text-xl font-bold text-foreground">
               MyRet
             </span>
-          </a>
+          </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6 lg:gap-8">
@@ -50,12 +59,33 @@ export function Navigation() {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-3 lg:gap-4">
-            <Button variant="ghost" size="sm">
-              Sign In
-            </Button>
-            <Button variant="hero" size="sm">
-              Get Started
-            </Button>
+            {user ? (
+              <>
+                {isAdmin && (
+                  <Button variant="ghost" size="sm" asChild>
+                    <Link to="/admin">Admin</Link>
+                  </Button>
+                )}
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/dashboard">
+                    <User className="w-4 h-4 mr-1" />
+                    Dashboard
+                  </Link>
+                </Button>
+                <Button variant="hero" size="sm" asChild>
+                  <Link to="/order/new">New Order</Link>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link to="/auth">Sign In</Link>
+                </Button>
+                <Button variant="hero" size="sm" asChild>
+                  <Link to="/auth">Get Started</Link>
+                </Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -107,12 +137,52 @@ export function Navigation() {
                   transition={{ duration: 0.3, delay: 0.35 }}
                   className="flex flex-col gap-2 pt-4 mt-2 border-t border-border/50"
                 >
-                  <Button variant="ghost" className="w-full justify-center">
-                    Sign In
-                  </Button>
-                  <Button variant="hero" className="w-full justify-center">
-                    Get Started
-                  </Button>
+                  {user ? (
+                    <>
+                      {isAdmin && (
+                        <Button variant="ghost" className="w-full justify-center" asChild>
+                          <Link to="/admin" onClick={() => setMobileMenuOpen(false)}>
+                            Admin Panel
+                          </Link>
+                        </Button>
+                      )}
+                      <Button variant="ghost" className="w-full justify-center" asChild>
+                        <Link to="/dashboard" onClick={() => setMobileMenuOpen(false)}>
+                          <User className="w-4 h-4 mr-1" />
+                          My Dashboard
+                        </Link>
+                      </Button>
+                      <Button variant="hero" className="w-full justify-center" asChild>
+                        <Link to="/order/new" onClick={() => setMobileMenuOpen(false)}>
+                          New Order
+                        </Link>
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        className="w-full justify-center text-destructive" 
+                        onClick={() => {
+                          handleSignOut();
+                          setMobileMenuOpen(false);
+                        }}
+                      >
+                        <LogOut className="w-4 h-4 mr-1" />
+                        Sign Out
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Button variant="ghost" className="w-full justify-center" asChild>
+                        <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+                          Sign In
+                        </Link>
+                      </Button>
+                      <Button variant="hero" className="w-full justify-center" asChild>
+                        <Link to="/auth" onClick={() => setMobileMenuOpen(false)}>
+                          Get Started
+                        </Link>
+                      </Button>
+                    </>
+                  )}
                 </motion.div>
               </div>
             </motion.div>
