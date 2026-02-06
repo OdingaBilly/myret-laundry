@@ -51,6 +51,7 @@ export type Database = {
       }
       orders: {
         Row: {
+          anonymous_id: string | null
           completed_at: string | null
           created_at: string
           customer_address: string
@@ -75,6 +76,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          anonymous_id?: string | null
           completed_at?: string | null
           created_at?: string
           customer_address: string
@@ -99,6 +101,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          anonymous_id?: string | null
           completed_at?: string | null
           created_at?: string
           customer_address?: string
@@ -127,30 +130,36 @@ export type Database = {
       profiles: {
         Row: {
           address: string | null
+          anonymous_id: string | null
           created_at: string
           full_name: string | null
           id: string
+          is_anonymous: boolean | null
           phone: string | null
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           address?: string | null
+          anonymous_id?: string | null
           created_at?: string
           full_name?: string | null
           id?: string
+          is_anonymous?: boolean | null
           phone?: string | null
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           address?: string | null
+          anonymous_id?: string | null
           created_at?: string
           full_name?: string | null
           id?: string
+          is_anonymous?: boolean | null
           phone?: string | null
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: []
       }

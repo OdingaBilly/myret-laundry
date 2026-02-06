@@ -141,11 +141,7 @@ export default function ServicePage() {
   }
 
   const handleBookNow = () => {
-    if (!user) {
-      navigate('/auth');
-    } else {
-      setShowOrderForm(true);
-    }
+    setShowOrderForm(true);
   };
 
   return (
