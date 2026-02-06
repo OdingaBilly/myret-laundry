@@ -9,7 +9,7 @@ import logo from "@/assets/logo.jpeg";
 const navLinks = [
   { label: "Services", href: "#services" },
   { label: "How It Works", href: "#how-it-works" },
-  { label: "Membership", href: "#membership" },
+  { label: "Membership", href: "/membership" },
   { label: "Community", href: "#community" },
 ];
 
@@ -46,15 +46,25 @@ export function Navigation() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-6 lg:gap-8">
-            {navLinks.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="text-muted-foreground hover:text-foreground transition-colors duration-300 text-sm font-medium"
-              >
-                {link.label}
-              </a>
-            ))}
+            {navLinks.map((link) =>
+              link.href.startsWith("/") ? (
+                <Link
+                  key={link.label}
+                  to={link.href}
+                  className="text-muted-foreground hover:text-foreground transition-colors duration-300 text-sm font-medium"
+                >
+                  {link.label}
+                </Link>
+              ) : (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="text-muted-foreground hover:text-foreground transition-colors duration-300 text-sm font-medium"
+                >
+                  {link.label}
+                </a>
+              )
+            )}
           </div>
 
           {/* Desktop CTA */}
@@ -112,24 +122,38 @@ export function Navigation() {
               <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-secondary/5 to-primary/5 backdrop-blur-md -z-10" />
               
               <div className="py-5 flex flex-col gap-2">
-                {navLinks.map((link, index) => (
-                  <motion.a
-                    key={link.label}
-                    href={link.href}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ 
-                      duration: 0.3, 
-                      delay: index * 0.08,
-                      ease: "easeOut"
-                    }}
-                    className="text-foreground hover:text-primary transition-colors duration-300 text-base font-medium py-2.5 px-3 rounded-lg hover:bg-muted/50"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    {link.label}
-                  </motion.a>
-                ))}
+                {navLinks.map((link, index) =>
+                  link.href.startsWith("/") ? (
+                    <motion.div
+                      key={link.label}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ duration: 0.3, delay: index * 0.08, ease: "easeOut" }}
+                    >
+                      <Link
+                        to={link.href}
+                        className="text-foreground hover:text-primary transition-colors duration-300 text-base font-medium py-2.5 px-3 rounded-lg hover:bg-muted/50 block"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    </motion.div>
+                  ) : (
+                    <motion.a
+                      key={link.label}
+                      href={link.href}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -20 }}
+                      transition={{ duration: 0.3, delay: index * 0.08, ease: "easeOut" }}
+                      className="text-foreground hover:text-primary transition-colors duration-300 text-base font-medium py-2.5 px-3 rounded-lg hover:bg-muted/50"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </motion.a>
+                  )
+                )}
                 <motion.div 
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}

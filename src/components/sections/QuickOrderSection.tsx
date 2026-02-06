@@ -20,11 +20,7 @@ export function QuickOrderSection() {
   const navigate = useNavigate();
 
   const handleServiceClick = (slug: string) => {
-    if (user) {
-      navigate(`/order/new?service=${slug}`);
-    } else {
-      navigate('/auth');
-    }
+    navigate(`/order/new?service=${slug}`);
   };
 
   return (
@@ -96,9 +92,9 @@ export function QuickOrderSection() {
               className="mt-6"
             >
               <Button variant="hero" asChild>
-                <Link to={user ? "/order/new" : "/auth"}>
+                <Link to="/order/new">
                   <Package className="w-4 h-4 mr-2" />
-                  {user ? 'Start Full Order' : 'Sign In to Order'}
+                  Start Full Order
                   <ArrowRight className="w-4 h-4 ml-1" />
                 </Link>
               </Button>

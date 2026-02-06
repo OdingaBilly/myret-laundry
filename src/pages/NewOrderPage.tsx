@@ -74,11 +74,11 @@ export default function NewOrderPage() {
       <div className="pt-20 pb-12 px-4">
         <div className="max-w-4xl mx-auto">
           <Link 
-            to="/dashboard" 
+            to="/" 
             className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span className="text-sm">Back to Dashboard</span>
+            <span className="text-sm">Back to Home</span>
           </Link>
 
           <motion.div

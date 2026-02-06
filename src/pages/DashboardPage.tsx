@@ -46,10 +46,11 @@ export default function DashboardPage() {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !loading) {
       navigate('/auth');
       return;
     }
+    if (!user) return;
 
     fetchOrders();
 
@@ -73,7 +74,7 @@ export default function DashboardPage() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
   const fetchOrders = async () => {
     if (!user) return;

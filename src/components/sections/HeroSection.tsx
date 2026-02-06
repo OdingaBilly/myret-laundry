@@ -48,11 +48,7 @@ export function HeroSection() {
   }, [displayText, isDeleting, currentTextIndex]);
 
   const handleStartJourney = () => {
-    if (user) {
-      navigate('/order/new');
-    } else {
-      navigate('/auth');
-    }
+    navigate('/order/new');
   };
 
   return (

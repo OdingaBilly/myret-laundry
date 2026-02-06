@@ -11,6 +11,7 @@ import AuthPage from "./pages/AuthPage";
 import DashboardPage from "./pages/DashboardPage";
 import NewOrderPage from "./pages/NewOrderPage";
 import AdminPage from "./pages/AdminPage";
+import MembershipPage from "./pages/MembershipPage";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/dashboard" element={<DashboardPage />} />
             <Route path="/order/new" element={<NewOrderPage />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/membership" element={<MembershipPage />} />
             <Route path="/services/:slug" element={<ServicePage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

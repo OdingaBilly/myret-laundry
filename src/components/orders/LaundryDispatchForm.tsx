@@ -90,25 +90,25 @@ export function LaundryDispatchForm({
   };
 
   const onSubmit = async (data: OrderFormData) => {
-    if (!user) {
-      toast({
-        title: 'Please sign in',
-        description: 'You need to be logged in to place an order.',
-        variant: 'destructive',
-      });
-      navigate('/auth');
-      return;
-    }
-
     setIsLoading(true);
 
     try {
+      let currentUser = user;
+
+      // Auto sign-in anonymously if not logged in
+      if (!currentUser) {
+        const { error: anonError } = await supabase.auth.signInAnonymously();
+        if (anonError) throw anonError;
+        const { data: sessionData } = await supabase.auth.getSession();
+        currentUser = sessionData.session?.user ?? null;
+        if (!currentUser) throw new Error('Failed to create anonymous session');
+      }
       let customerPhotoUrl: string | null = null;
 
       // Upload photo if provided
       if (photoFile) {
         const fileExt = photoFile.name.split('.').pop();
-        const filePath = `${user.id}/${Date.now()}.${fileExt}`;
+        const filePath = `${currentUser.id}/${Date.now()}.${fileExt}`;
         
         const { error: uploadError, data: uploadData } = await supabase.storage
           .from('laundry-photos')
@@ -125,7 +125,7 @@ export function LaundryDispatchForm({
 
       // Create order
       const { error: orderError } = await supabase.from('orders').insert({
-        user_id: user.id,
+        user_id: currentUser.id,
         service_type: serviceType,
         customer_name: data.customerName,
         customer_phone: data.customerPhone,
