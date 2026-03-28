@@ -1,19 +1,10 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { Package, ArrowRight, Sparkles, Shirt, Zap, Droplets, Leaf, Crown } from 'lucide-react';
+import { Package, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
+import { allServices } from '@/lib/services';
 import laundryColorfulTowels from '@/assets/laundry-colorful-towels.jpg';
-
-const services = [
-  { slug: 'dry-cleaning', name: 'Dry Cleaning', icon: Sparkles },
-  { slug: 'wash-and-fold', name: 'Wash & Fold', icon: Shirt },
-  { slug: 'express-service', name: 'Express', icon: Zap },
-  { slug: 'stain-removal', name: 'Stain Removal', icon: Droplets },
-  { slug: 'eco-care', name: 'Eco Care', icon: Leaf },
-  { slug: 'vip-treatment', name: 'VIP', icon: Crown },
-];
 
 export function QuickOrderSection() {
   const { user } = useAuth();
@@ -65,23 +56,26 @@ export function QuickOrderSection() {
             </p>
 
             {/* Quick service buttons */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-              {services.map((service, index) => (
-                <motion.button
-                  key={service.slug}
-                  initial={{ opacity: 0, y: 10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.05 }}
-                  onClick={() => handleServiceClick(service.slug)}
-                  className="flex items-center gap-2 p-3 rounded-xl glass-card hover:border-primary hover:shadow-lg transition-all group text-left"
-                >
-                  <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    <service.icon className="w-4 h-4" />
-                  </div>
-                  <span className="text-sm font-medium text-foreground">{service.name}</span>
-                </motion.button>
-              ))}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+              {allServices.map((service, index) => {
+                const Icon = service.icon;
+                return (
+                  <motion.button
+                    key={service.slug}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.05 }}
+                    onClick={() => handleServiceClick(service.slug)}
+                    className="flex items-center gap-2 p-3 rounded-xl glass-card hover:border-primary hover:shadow-lg transition-all group text-left"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <span className="text-sm font-medium text-foreground">{service.name}</span>
+                  </motion.button>
+                );
+              })}
             </div>
 
             <motion.div
