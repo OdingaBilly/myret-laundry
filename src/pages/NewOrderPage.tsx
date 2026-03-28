@@ -43,24 +43,27 @@ export default function NewOrderPage() {
 
           {/* Service Selection */}
           {!selectedService ? (
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-              {services.map((service, index) => (
-                <motion.button
-                  key={service.slug}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  onClick={() => setSelectedService(service.slug)}
-                  className="glass-card p-4 rounded-xl text-left hover:border-primary hover:shadow-lg transition-all group"
-                >
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-3 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    {service.icon}
-                  </div>
-                  <h3 className="font-medium text-foreground mb-1">{service.name}</h3>
-                  <p className="text-xs text-muted-foreground mb-2">{service.description}</p>
-                  <p className="text-sm font-semibold text-primary">{service.price}</p>
-                </motion.button>
-              ))}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {allServices.map((service, index) => {
+                const Icon = service.icon;
+                return (
+                  <motion.button
+                    key={service.slug}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.05 }}
+                    onClick={() => setSelectedService(service.slug as LaundryService)}
+                    className="glass-card p-4 rounded-xl text-left hover:border-primary hover:shadow-lg transition-all group"
+                  >
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary mb-3 group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
+                      <Icon className="w-5 h-5" />
+                    </div>
+                    <h3 className="font-medium text-foreground mb-1">{service.name}</h3>
+                    <p className="text-xs text-muted-foreground mb-2">{service.description}</p>
+                    <p className="text-sm font-semibold text-primary">{service.price}</p>
+                  </motion.button>
+                );
+              })}
             </div>
           ) : (
             <div className="grid lg:grid-cols-3 gap-6">
