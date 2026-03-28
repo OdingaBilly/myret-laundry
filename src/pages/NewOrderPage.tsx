@@ -1,71 +1,21 @@
 import { useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Sparkles, Shirt, Zap, Droplets, Leaf, Crown } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { Navigation } from '@/components/layout/Navigation';
 import { LaundryDispatchForm } from '@/components/orders/LaundryDispatchForm';
 import { FooterSection } from '@/components/sections/FooterSection';
+import { allServices } from '@/lib/services';
 import type { Database } from '@/integrations/supabase/types';
 
 type LaundryService = Database['public']['Enums']['laundry_service'];
-
-const services: { 
-  slug: LaundryService; 
-  name: string; 
-  description: string; 
-  icon: React.ReactNode;
-  price: string;
-}[] = [
-  {
-    slug: 'dry-cleaning',
-    name: 'Dry Cleaning',
-    description: 'Premium solvent-free cleaning for delicate fabrics',
-    icon: <Sparkles className="w-5 h-5" />,
-    price: 'From KES 350',
-  },
-  {
-    slug: 'wash-and-fold',
-    name: 'Wash & Fold',
-    description: 'Fresh, crisp everyday laundry',
-    icon: <Shirt className="w-5 h-5" />,
-    price: 'From KES 150',
-  },
-  {
-    slug: 'express-service',
-    name: 'Express Service',
-    description: 'Same-day turnaround when you need it most',
-    icon: <Zap className="w-5 h-5" />,
-    price: 'From KES 500',
-  },
-  {
-    slug: 'stain-removal',
-    name: 'Stain Removal',
-    description: 'Expert treatment for stubborn stains',
-    icon: <Droplets className="w-5 h-5" />,
-    price: 'From KES 250',
-  },
-  {
-    slug: 'eco-care',
-    name: 'Eco Care',
-    description: 'Sustainable cleaning for the eco-conscious',
-    icon: <Leaf className="w-5 h-5" />,
-    price: 'From KES 200',
-  },
-  {
-    slug: 'vip-treatment',
-    name: 'VIP Treatment',
-    description: 'White-glove service for luxury garments',
-    icon: <Crown className="w-5 h-5" />,
-    price: 'From KES 800',
-  },
-];
 
 export default function NewOrderPage() {
   const [searchParams] = useSearchParams();
   const preselectedService = searchParams.get('service') as LaundryService | null;
   const [selectedService, setSelectedService] = useState<LaundryService | null>(preselectedService);
 
-  const selectedServiceData = services.find(s => s.slug === selectedService);
+  const selectedServiceData = allServices.find(s => s.slug === selectedService);
 
   return (
     <div className="min-h-screen bg-background">
