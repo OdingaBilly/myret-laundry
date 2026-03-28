@@ -204,6 +204,8 @@ export type Database = {
         | "stain-removal"
         | "eco-care"
         | "vip-treatment"
+        | "car-wash"
+        | "carpet-cleaning"
       order_status:
         | "pending"
         | "confirmed"
@@ -352,6 +354,8 @@ export const Constants = {
         "stain-removal",
         "eco-care",
         "vip-treatment",
+        "car-wash",
+        "carpet-cleaning",
       ],
       order_status: [
         "pending",
