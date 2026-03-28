@@ -76,7 +76,7 @@ export default function NewOrderPage() {
                 <div className="glass-card p-4 rounded-xl sticky top-24">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                      {selectedServiceData?.icon}
+                      {selectedServiceData && <selectedServiceData.icon className="w-5 h-5" />}
                     </div>
                     <div>
                       <h3 className="font-bold text-foreground">{selectedServiceData?.name}</h3>

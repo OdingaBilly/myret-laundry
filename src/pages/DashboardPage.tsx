@@ -11,31 +11,10 @@ import { OrderTracker } from '@/components/orders/OrderTracker';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { serviceLabels, statusColors } from '@/lib/services';
 import type { Database } from '@/integrations/supabase/types';
 
 type Order = Database['public']['Tables']['orders']['Row'];
-
-const serviceLabels: Record<string, string> = {
-  'dry-cleaning': 'Dry Cleaning',
-  'wash-and-fold': 'Wash & Fold',
-  'express-service': 'Express Service',
-  'stain-removal': 'Stain Removal',
-  'eco-care': 'Eco Care',
-  'vip-treatment': 'VIP Treatment',
-};
-
-const statusColors: Record<string, string> = {
-  pending: 'bg-yellow-100 text-yellow-800',
-  confirmed: 'bg-blue-100 text-blue-800',
-  picked_up: 'bg-indigo-100 text-indigo-800',
-  at_store: 'bg-purple-100 text-purple-800',
-  in_progress: 'bg-pink-100 text-pink-800',
-  ready: 'bg-green-100 text-green-800',
-  out_for_delivery: 'bg-orange-100 text-orange-800',
-  delivered: 'bg-teal-100 text-teal-800',
-  completed: 'bg-emerald-100 text-emerald-800',
-  cancelled: 'bg-red-100 text-red-800',
-};
 
 export default function DashboardPage() {
   const [orders, setOrders] = useState<Order[]>([]);
