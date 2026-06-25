@@ -14,6 +14,89 @@ export type Database = {
   }
   public: {
     Tables: {
+      delivery_zones: {
+        Row: {
+          active: boolean
+          area_description: string
+          created_at: string
+          delivery_fee: number
+          eta_hours: number
+          id: string
+          name: string
+          pickup_fee: number
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          area_description?: string
+          created_at?: string
+          delivery_fee?: number
+          eta_hours?: number
+          id?: string
+          name: string
+          pickup_fee?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          area_description?: string
+          created_at?: string
+          delivery_fee?: number
+          eta_hours?: number
+          id?: string
+          name?: string
+          pickup_fee?: number
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      drivers: {
+        Row: {
+          active: boolean
+          created_at: string
+          id: string
+          name: string
+          notes: string | null
+          phone: string
+          updated_at: string
+          vehicle: string | null
+          zone_id: string | null
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name: string
+          notes?: string | null
+          phone: string
+          updated_at?: string
+          vehicle?: string | null
+          zone_id?: string | null
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          id?: string
+          name?: string
+          notes?: string | null
+          phone?: string
+          updated_at?: string
+          vehicle?: string | null
+          zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drivers_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_status_history: {
         Row: {
           created_at: string
@@ -58,13 +141,17 @@ export type Database = {
           customer_name: string
           customer_phone: string
           customer_photo_url: string | null
+          delivery_fee: number | null
           delivery_option: Database["public"]["Enums"]["delivery_option"]
+          dispatch_notes: string | null
+          driver_id: string | null
           estimated_price: number | null
           final_price: number | null
           id: string
           laundry_notes: string | null
           picked_up_at: string | null
           pickup_date: string | null
+          pickup_fee: number | null
           pickup_time_slot: string | null
           return_date: string
           return_option: Database["public"]["Enums"]["return_option"]
@@ -74,6 +161,7 @@ export type Database = {
           store_photo_url: string | null
           updated_at: string
           user_id: string
+          zone_id: string | null
         }
         Insert: {
           anonymous_id?: string | null
@@ -83,13 +171,17 @@ export type Database = {
           customer_name: string
           customer_phone: string
           customer_photo_url?: string | null
+          delivery_fee?: number | null
           delivery_option: Database["public"]["Enums"]["delivery_option"]
+          dispatch_notes?: string | null
+          driver_id?: string | null
           estimated_price?: number | null
           final_price?: number | null
           id?: string
           laundry_notes?: string | null
           picked_up_at?: string | null
           pickup_date?: string | null
+          pickup_fee?: number | null
           pickup_time_slot?: string | null
           return_date: string
           return_option: Database["public"]["Enums"]["return_option"]
@@ -99,6 +191,7 @@ export type Database = {
           store_photo_url?: string | null
           updated_at?: string
           user_id: string
+          zone_id?: string | null
         }
         Update: {
           anonymous_id?: string | null
@@ -108,13 +201,17 @@ export type Database = {
           customer_name?: string
           customer_phone?: string
           customer_photo_url?: string | null
+          delivery_fee?: number | null
           delivery_option?: Database["public"]["Enums"]["delivery_option"]
+          dispatch_notes?: string | null
+          driver_id?: string | null
           estimated_price?: number | null
           final_price?: number | null
           id?: string
           laundry_notes?: string | null
           picked_up_at?: string | null
           pickup_date?: string | null
+          pickup_fee?: number | null
           pickup_time_slot?: string | null
           return_date?: string
           return_option?: Database["public"]["Enums"]["return_option"]
@@ -124,8 +221,24 @@ export type Database = {
           store_photo_url?: string | null
           updated_at?: string
           user_id?: string
+          zone_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "orders_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "delivery_zones"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -160,6 +273,63 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      services: {
+        Row: {
+          active: boolean
+          base_price: number
+          category: string
+          created_at: string
+          description: string
+          features: string[]
+          full_description: string
+          gradient: string
+          icon_key: string
+          id: string
+          name: string
+          price_label: string | null
+          slug: string
+          sort_order: number
+          turnaround: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          base_price?: number
+          category?: string
+          created_at?: string
+          description?: string
+          features?: string[]
+          full_description?: string
+          gradient?: string
+          icon_key?: string
+          id?: string
+          name: string
+          price_label?: string | null
+          slug: string
+          sort_order?: number
+          turnaround?: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          base_price?: number
+          category?: string
+          created_at?: string
+          description?: string
+          features?: string[]
+          full_description?: string
+          gradient?: string
+          icon_key?: string
+          id?: string
+          name?: string
+          price_label?: string | null
+          slug?: string
+          sort_order?: number
+          turnaround?: string
+          updated_at?: string
         }
         Relationships: []
       }
