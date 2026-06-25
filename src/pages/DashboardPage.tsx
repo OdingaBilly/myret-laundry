@@ -88,17 +88,17 @@ export default function DashboardPage() {
     <div className="min-h-screen bg-background">
       <Navigation />
       
-      <div className="pt-20 pb-12 px-4">
+      <div className="pt-20 pb-12 px-3 md:px-4">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-2xl font-bold text-foreground">My Orders</h1>
-              <p className="text-sm text-muted-foreground">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-5 md:mb-6">
+            <div className="min-w-0">
+              <h1 className="text-xl md:text-2xl font-bold text-foreground">My Orders</h1>
+              <p className="text-xs md:text-sm text-muted-foreground">
                 Track and manage your laundry orders
               </p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               {isAdmin && (
                 <Button variant="outline" size="sm" asChild>
                   <Link to="/admin">Admin Panel</Link>
@@ -117,22 +117,22 @@ export default function DashboardPage() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="glass-card p-4 rounded-xl mb-6 flex items-center justify-between"
+            className="glass-card p-3 md:p-4 rounded-xl mb-5 md:mb-6 flex items-center justify-between gap-3"
           >
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <User className="w-5 h-5 text-primary" />
+            <div className="flex items-center gap-3 min-w-0 flex-1">
+              <div className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <User className="w-4 h-4 md:w-5 md:h-5 text-primary" />
               </div>
-              <div>
-                <p className="font-medium text-foreground">{user?.email}</p>
+              <div className="min-w-0">
+                <p className="font-medium text-foreground text-sm md:text-base truncate">{user?.email || 'Guest'}</p>
                 <p className="text-xs text-muted-foreground">
                   {orders.length} total orders
                 </p>
               </div>
             </div>
-            <Button variant="ghost" size="sm" onClick={handleSignOut}>
-              <LogOut className="w-4 h-4 mr-1" />
-              Sign Out
+            <Button variant="ghost" size="sm" onClick={handleSignOut} className="flex-shrink-0">
+              <LogOut className="w-4 h-4 sm:mr-1" />
+              <span className="hidden sm:inline">Sign Out</span>
             </Button>
           </motion.div>
 

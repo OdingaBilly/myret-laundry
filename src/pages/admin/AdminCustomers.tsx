@@ -12,14 +12,11 @@ export default function AdminCustomers() {
   const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    fetchProfiles();
+    supabase.from('profiles').select('*').order('created_at', { ascending: false }).then(({ data }) => {
+      setProfiles(data || []);
+      setLoading(false);
+    });
   }, []);
-
-  const fetchProfiles = async () => {
-    const { data } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
-    setProfiles(data || []);
-    setLoading(false);
-  };
 
   const filtered = profiles.filter(p =>
     (p.full_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -32,10 +29,10 @@ export default function AdminCustomers() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 md:space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-foreground">Customers</h2>
-        <p className="text-muted-foreground text-sm">{profiles.length} registered users</p>
+        <h2 className="text-xl md:text-2xl font-bold text-foreground">Customers</h2>
+        <p className="text-muted-foreground text-xs md:text-sm">{profiles.length} registered users</p>
       </div>
 
       <div className="relative max-w-md">
@@ -43,7 +40,33 @@ export default function AdminCustomers() {
         <Input placeholder="Search customers..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-10" />
       </div>
 
-      <div className="glass-card rounded-xl overflow-hidden">
+      {/* Mobile cards */}
+      <div className="md:hidden space-y-3">
+        {filtered.map((profile) => (
+          <div key={profile.id} className="glass-card rounded-xl p-4">
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                <Users className="w-5 h-5 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <p className="text-sm font-medium truncate">{profile.full_name || 'Anonymous'}</p>
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium flex-shrink-0 ${profile.is_anonymous ? 'bg-orange-100 text-orange-700' : 'bg-green-100 text-green-700'}`}>
+                    {profile.is_anonymous ? 'Guest' : 'Registered'}
+                  </span>
+                </div>
+                {profile.phone && <p className="text-xs text-muted-foreground">{profile.phone}</p>}
+                {profile.address && <p className="text-xs text-muted-foreground truncate">{profile.address}</p>}
+                <p className="text-xs text-muted-foreground mt-1">Joined {new Date(profile.created_at).toLocaleDateString()}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+        {filtered.length === 0 && <div className="p-8 text-center text-muted-foreground text-sm">No customers found</div>}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden md:block glass-card rounded-xl overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="bg-muted/50">

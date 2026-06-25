@@ -30,16 +30,15 @@ export default function AdminLayout() {
       <div className="min-h-screen flex w-full">
         <AdminSidebar />
         <div className="flex-1 flex flex-col min-w-0">
-          <header className="h-14 flex items-center border-b px-4 bg-background sticky top-0 z-10">
-            <SidebarTrigger className="mr-4" />
-            <h1 className="text-lg font-bold text-foreground">MyRet Admin</h1>
-            <div className="ml-auto">
-              <a href="/" className="text-sm text-muted-foreground hover:text-foreground">
-                ← Back to Site
-              </a>
-            </div>
+          <header className="h-14 flex items-center border-b px-3 md:px-4 bg-background sticky top-0 z-10 gap-2">
+            <SidebarTrigger />
+            <h1 className="text-base md:text-lg font-bold text-foreground truncate">MyRet Admin</h1>
+            <a href="/" className="ml-auto text-xs md:text-sm text-muted-foreground hover:text-foreground whitespace-nowrap">
+              <span className="hidden sm:inline">← Back to Site</span>
+              <span className="sm:hidden">← Site</span>
+            </a>
           </header>
-          <main className="flex-1 p-4 md:p-6 overflow-auto">
+          <main className="flex-1 p-3 md:p-6 overflow-auto">
             <Outlet />
           </main>
         </div>
