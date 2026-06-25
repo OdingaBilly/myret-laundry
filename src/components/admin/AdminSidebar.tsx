@@ -1,6 +1,6 @@
 import {
   LayoutDashboard, Package, Users, Tag, CreditCard,
-  Crown, Settings, BarChart3, ShoppingBag
+  Crown, Settings, BarChart3, ShoppingBag, Truck
 } from 'lucide-react';
 import { NavLink } from '@/components/NavLink';
 import { useLocation } from 'react-router-dom';
@@ -21,6 +21,7 @@ const mainItems = [
   { title: 'Orders', url: '/admin/orders', icon: Package },
   { title: 'Customers', url: '/admin/customers', icon: Users },
   { title: 'Services', url: '/admin/services', icon: Tag },
+  { title: 'Dispatch', url: '/admin/dispatch', icon: Truck },
   { title: 'Memberships', url: '/admin/memberships', icon: Crown },
   { title: 'Payments', url: '/admin/payments', icon: CreditCard },
   { title: 'Analytics', url: '/admin/analytics', icon: BarChart3 },
