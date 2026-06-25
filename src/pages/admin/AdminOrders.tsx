@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { serviceLabels, statusColors, statusOptions } from '@/lib/services';
+import { useZones, useDrivers } from '@/hooks/useServices';
 import type { Database } from '@/integrations/supabase/types';
 import { motion } from 'framer-motion';
 
@@ -20,6 +21,8 @@ export default function AdminOrders() {
   const [uploadingPhoto, setUploadingPhoto] = useState<string | null>(null);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const { toast } = useToast();
+  const { data: zones } = useZones({ includeInactive: true });
+  const { data: drivers } = useDrivers({ includeInactive: true });
 
   useEffect(() => {
     fetchOrders();
@@ -68,6 +71,14 @@ export default function AdminOrders() {
       toast({ title: 'Upload Failed', description: error.message, variant: 'destructive' });
     }
     setUploadingPhoto(null);
+  };
+
+  const updateOrderField = async (orderId: string, patch: Record<string, any>) => {
+    const { error } = await supabase.from('orders').update(patch).eq('id', orderId);
+    if (error) return toast({ title: 'Update failed', description: error.message, variant: 'destructive' });
+    toast({ title: 'Order updated' });
+    fetchOrders();
+    setSelectedOrder((prev) => (prev && prev.id === orderId ? { ...prev, ...patch } : prev));
   };
 
   const filteredOrders = orders.filter(order => {
