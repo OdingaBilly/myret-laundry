@@ -8,8 +8,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { useServices } from '@/hooks/useServices';
-import { iconOptions, gradientOptions, categoryOptions, getIcon, type ServiceData } from '@/lib/services';
+import { useServices, useCategories } from '@/hooks/useServices';
+import { iconOptions, gradientOptions, getIcon, type ServiceData } from '@/lib/services';
 
 type FormState = {
   id?: string;
@@ -32,7 +32,7 @@ const emptyForm: FormState = {
   slug: '', name: '', description: '', full_description: '',
   base_price: 0, price_label: '', turnaround: '24-48 hours',
   features: '', icon_key: 'sparkles', gradient: gradientOptions[0],
-  category: 'garment', active: true, sort_order: 99,
+  category: '', active: true, sort_order: 99,
 };
 
 const toForm = (s: ServiceData): FormState => ({
@@ -48,6 +48,7 @@ export default function AdminServices() {
   const { services, isLoading } = useServices({ includeInactive: true });
   const qc = useQueryClient();
   const { toast } = useToast();
+  const { categories } = useCategories() as any;
   const [editing, setEditing] = useState<FormState | null>(null);
   const [saving, setSaving] = useState(false);
 
@@ -108,7 +109,7 @@ export default function AdminServices() {
           <h2 className="text-xl md:text-2xl font-bold text-foreground">Services & Pricing</h2>
           <p className="text-muted-foreground text-xs md:text-sm">Add, edit, price and toggle services across the site.</p>
         </div>
-        <Button onClick={() => setEditing({ ...emptyForm })}>
+        <Button onClick={() => setEditing({ ...emptyForm, category: categories?.[0]?.id ?? '' })}>
           <Plus className="w-4 h-4 mr-1" /> New Service
         </Button>
       </div>
@@ -137,7 +138,7 @@ export default function AdminServices() {
                 <span>•</span>
                 <span>{s.features.length} features</span>
                 <span>•</span>
-                <span className="capitalize">{s.category}</span>
+                <span className="capitalize">{categories?.find(c => c.id === s.category)?.name ?? s.category}</span>
               </div>
               <div className="flex items-center gap-2 mt-auto">
                 <Button variant="outline" size="sm" onClick={() => setEditing(toForm(s))}>
@@ -188,7 +189,7 @@ export default function AdminServices() {
                 <div>
                   <Label>Category</Label>
                   <select value={editing.category} onChange={(e) => setEditing({ ...editing, category: e.target.value })} className="flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm">
-                    {categoryOptions.map(o => <option key={o.value} value={o.value}>{o.label}</option>)}
+                    {(categories ?? []).map((c: any) => <option key={c.id} value={c.id}>{c.name}</option>)}
                   </select>
                 </div>
                 <div>

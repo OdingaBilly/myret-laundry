@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
-import { mapServiceRow, type ServiceData, fallbackServices } from '@/lib/services';
+import { mapServiceRow, type ServiceData, fallbackServices, fallbackCategories } from '@/lib/services';
 
 export function useServices(options?: { includeInactive?: boolean }) {
   const includeInactive = !!options?.includeInactive;
@@ -76,4 +76,30 @@ export function useDrivers(options?: { includeInactive?: boolean }) {
     },
     staleTime: 60_000,
   });
+}
+
+export type Category = {
+  id: string;
+  name: string;
+  sort_order: number;
+  created_at?: string;
+  updated_at?: string;
+};
+
+export function useCategories() {
+  const query = useQuery({
+    queryKey: ['service_categories'],
+    queryFn: async (): Promise<Category[]> => {
+      const { data, error } = await supabase.from('service_categories').select('*').order('sort_order', { ascending: true });
+      if (error) throw error;
+      return (data ?? []) as Category[];
+    },
+    staleTime: 60_000,
+  });
+
+  // Provide fallback while DB loads
+  return {
+    ...query,
+    categories: query.data && query.data.length > 0 ? query.data : (query.isLoading ? fallbackCategories : query.data ?? []),
+  } as unknown as ReturnType<typeof useQuery> & { categories: Category[] };
 }

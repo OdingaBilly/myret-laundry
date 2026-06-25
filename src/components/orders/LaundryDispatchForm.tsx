@@ -132,8 +132,26 @@ export function LaundryDispatchForm({
         customerPhotoUrl = urlData.publicUrl;
       }
 
-      // Create order
-      const { error: orderError } = await supabase.from('orders').insert({
+      // Determine membership and points to award
+      let pointsAwarded = 0;
+      let membershipId: string | null = null;
+
+      const { data: membershipData } = await supabase.from('memberships').select('*').eq('user_id', currentUser.id).maybeSingle();
+      if (membershipData) {
+        membershipId = membershipData.id;
+      }
+
+      let multiplier = 1;
+      if (membershipData?.plan_id) {
+        const { data: planData } = await supabase.from('membership_plans').select('points_multiplier').eq('id', membershipData.plan_id).maybeSingle();
+        if (planData?.points_multiplier) multiplier = Number(planData.points_multiplier) || 1;
+      }
+
+      // Simple points rule: 1 point per KES 10 spent on estimated price, scaled by membership multiplier
+      pointsAwarded = Math.floor(((estimatedPrice ?? 0) / 10) * multiplier);
+
+      // Create order (include points and membership link)
+      const { data: orderInsertData, error: orderError } = await supabase.from('orders').insert({
         user_id: currentUser.id,
         service_type: serviceType,
         customer_name: data.customerName,
@@ -151,9 +169,33 @@ export function LaundryDispatchForm({
         pickup_fee: pickupFee || null,
         delivery_fee: deliveryFee || null,
         estimated_price: estimatedPrice || null,
-      });
+        points_awarded: pointsAwarded || null,
+        membership_id: membershipId || null,
+      }).select('*').single();
 
       if (orderError) throw orderError;
+
+      const createdOrder = orderInsertData;
+
+      // Record loyalty points ledger and update membership balance if applicable
+      if (pointsAwarded > 0) {
+        const { error: lpError } = await supabase.from('loyalty_points').insert({
+          user_id: currentUser.id,
+          membership_id: membershipId || null,
+          order_id: createdOrder.id,
+          points: pointsAwarded,
+          reason: 'Order placed',
+        });
+
+        if (lpError) {
+          // non-fatal: log and continue
+          console.warn('Failed to record loyalty points:', lpError.message);
+        } else if (membershipId) {
+          // update membership points balance
+          const { error: updErr } = await supabase.from('memberships').update({ points_balance: Number(membershipData.points_balance || 0) + pointsAwarded }).eq('id', membershipId);
+          if (updErr) console.warn('Failed to update membership points balance:', updErr.message);
+        }
+      }
 
       toast({
         title: 'Order Placed!',

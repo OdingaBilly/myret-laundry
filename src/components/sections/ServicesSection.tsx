@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { useServices } from "@/hooks/useServices";
+import { useServices, useCategories } from "@/hooks/useServices";
 import laundryWaterSplash from "@/assets/laundry-water-splash.jpg";
 
 const containerVariants = {
@@ -15,6 +15,7 @@ const itemVariants = {
 
 export function ServicesSection() {
   const { services } = useServices();
+  const { categories } = useCategories() as any;
   return (
     <section id="services" className="py-12 md:py-20 lg:py-24 relative bg-background overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
@@ -72,6 +73,7 @@ export function ServicesSection() {
                     {service.description}
                   </p>
                   <p className="text-primary font-semibold text-xs md:text-sm">{service.price}</p>
+                  <p className="text-muted-foreground text-[11px] mt-1">{categories?.find(c => c.id === service.category)?.name ?? service.category}</p>
                 </Link>
               </motion.div>
             );

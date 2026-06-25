@@ -21,6 +21,7 @@ const mainItems = [
   { title: 'Orders', url: '/admin/orders', icon: Package },
   { title: 'Customers', url: '/admin/customers', icon: Users },
   { title: 'Services', url: '/admin/services', icon: Tag },
+  { title: 'Categories', url: '/admin/categories', icon: Tag },
   { title: 'Dispatch', url: '/admin/dispatch', icon: Truck },
   { title: 'Memberships', url: '/admin/memberships', icon: Crown },
   { title: 'Payments', url: '/admin/payments', icon: CreditCard },

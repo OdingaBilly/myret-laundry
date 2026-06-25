@@ -11,6 +11,7 @@ import { OrderTracker } from '@/components/orders/OrderTracker';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
+import { useMembership, useMembershipPlans } from '@/hooks/useMembership';
 import { serviceLabels, statusColors } from '@/lib/services';
 import type { Database } from '@/integrations/supabase/types';
 
@@ -22,6 +23,8 @@ export default function DashboardPage() {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const navigate = useNavigate();
   const { user, signOut, isAdmin } = useAuth();
+  const { data: membership } = useMembership(user?.id as any);
+  const { data: membershipPlans } = useMembershipPlans();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -124,10 +127,10 @@ export default function DashboardPage() {
                 <User className="w-4 h-4 md:w-5 md:h-5 text-primary" />
               </div>
               <div className="min-w-0">
-                <p className="font-medium text-foreground text-sm md:text-base truncate">{user?.email || 'Guest'}</p>
-                <p className="text-xs text-muted-foreground">
-                  {orders.length} total orders
-                </p>
+                  <p className="font-medium text-foreground text-sm md:text-base truncate">{user?.email || 'Guest'}</p>
+                  <p className="text-xs text-muted-foreground">{orders.length} total orders</p>
+                  <p className="text-xs text-muted-foreground">Membership: {membershipPlans?.find(p => p.id === membership?.plan_id)?.name ?? (membership ? 'Member' : 'None')}</p>
+                  <p className="text-xs text-muted-foreground">Points: {membership?.points_balance ?? 0}</p>
               </div>
             </div>
             <Button variant="ghost" size="sm" onClick={handleSignOut} className="flex-shrink-0">

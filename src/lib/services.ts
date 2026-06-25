@@ -118,15 +118,27 @@ export const mapServiceRow = (row: ServiceRow): ServiceData => ({
   icon: getIcon(row.icon_key),
   iconKey: row.icon_key ?? 'sparkles',
   gradient: row.gradient ?? 'from-primary/20 to-primary/5',
-  category: row.category ?? 'garment',
+  category: row.category ?? 'cat_everyday',
   active: row.active ?? true,
   sortOrder: row.sort_order ?? 0,
 });
 
 // Used as a fallback while DB loads or if it's empty
 export const fallbackServices: ServiceData[] = [
-  { slug: 'dry-cleaning', name: 'Dry Cleaning', description: 'Premium solvent-free cleaning for delicate fabrics.', fullDescription: '', price: 'From KES 350', basePrice: 350, turnaround: '24-48 hours', features: [], icon: Sparkles, iconKey: 'sparkles', gradient: 'from-primary/20 to-primary/5', category: 'garment', active: true, sortOrder: 1 },
-  { slug: 'wash-and-fold', name: 'Wash & Fold', description: 'Fresh everyday laundry.', fullDescription: '', price: 'From KES 150', basePrice: 150, turnaround: 'Same day', features: [], icon: Shirt, iconKey: 'shirt', gradient: 'from-secondary/20 to-secondary/5', category: 'garment', active: true, sortOrder: 2 },
+  { slug: 'dry-cleaning', name: 'Dry Cleaning', description: 'Premium solvent-free cleaning for delicate fabrics.', fullDescription: '', price: 'From KES 350', basePrice: 350, turnaround: '24-48 hours', features: [], icon: Sparkles, iconKey: 'sparkles', gradient: 'from-primary/20 to-primary/5', category: 'cat_everyday', active: true, sortOrder: 1 },
+  { slug: 'wash-and-fold', name: 'Wash & Fold', description: 'Fresh everyday laundry.', fullDescription: '', price: 'From KES 150', basePrice: 150, turnaround: 'Same day', features: [], icon: Shirt, iconKey: 'shirt', gradient: 'from-secondary/20 to-secondary/5', category: 'cat_everyday', active: true, sortOrder: 2 },
+];
+
+export const fallbackCategories = [
+  { id: 'cat_weight_based', name: 'Weight Based Laundry', sort_order: 1 },
+  { id: 'cat_everyday', name: 'Everyday Clothing', sort_order: 2 },
+  { id: 'cat_formal', name: 'Formal Wear', sort_order: 3 },
+  { id: 'cat_traditional', name: 'Traditional Wear', sort_order: 4 },
+  { id: 'cat_bedding', name: 'Bedding & Linen', sort_order: 5 },
+  { id: 'cat_bath', name: 'Towels & Bath Items', sort_order: 6 },
+  { id: 'cat_curtains', name: 'Curtains & Household Fabrics', sort_order: 7 },
+  { id: 'cat_special', name: 'Special Garments', sort_order: 8 },
+  { id: 'cat_misc', name: 'Miscellaneous', sort_order: 9 },
 ];
 
 // Back-compat export — populated lazily via hook; legacy importers fall back to defaults.
