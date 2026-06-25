@@ -172,12 +172,12 @@ export function LaundryDispatchForm({
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className={compact ? '' : 'glass-card p-6 rounded-2xl'}
+      className={compact ? '' : 'glass-card p-4 md:p-6 rounded-2xl'}
     >
       {!compact && (
-        <div className="mb-6">
-          <h3 className="text-xl font-bold text-foreground">Schedule {serviceName}</h3>
-          <p className="text-sm text-muted-foreground mt-1">
+        <div className="mb-5 md:mb-6">
+          <h3 className="text-lg md:text-xl font-bold text-foreground">Schedule {serviceName}</h3>
+          <p className="text-xs md:text-sm text-muted-foreground mt-1">
             Fill in the details to dispatch your laundry
           </p>
         </div>
@@ -334,11 +334,11 @@ export function LaundryDispatchForm({
 
         {/* Pickup Scheduling */}
         {deliveryOption === 'pickup_requested' && (
-          <div className="grid grid-cols-2 gap-4 p-4 bg-muted/30 rounded-lg">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4 p-3 md:p-4 bg-muted/30 rounded-lg">
             <div className="space-y-2">
               <Label htmlFor="pickupDate">Pickup Date</Label>
               <div className="relative">
-                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                 <Input
                   {...register('pickupDate')}
                   id="pickupDate"
@@ -351,7 +351,7 @@ export function LaundryDispatchForm({
             <div className="space-y-2">
               <Label htmlFor="pickupTimeSlot">Time Slot</Label>
               <div className="relative">
-                <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Clock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
                 <select
                   {...register('pickupTimeSlot')}
                   id="pickupTimeSlot"
