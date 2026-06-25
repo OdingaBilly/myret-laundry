@@ -5,7 +5,7 @@ import { ArrowLeft } from 'lucide-react';
 import { Navigation } from '@/components/layout/Navigation';
 import { LaundryDispatchForm } from '@/components/orders/LaundryDispatchForm';
 import { FooterSection } from '@/components/sections/FooterSection';
-import { allServices } from '@/lib/services';
+import { useServices } from '@/hooks/useServices';
 import type { Database } from '@/integrations/supabase/types';
 
 type LaundryService = Database['public']['Enums']['laundry_service'];
@@ -14,8 +14,9 @@ export default function NewOrderPage() {
   const [searchParams] = useSearchParams();
   const preselectedService = searchParams.get('service') as LaundryService | null;
   const [selectedService, setSelectedService] = useState<LaundryService | null>(preselectedService);
+  const { services } = useServices();
 
-  const selectedServiceData = allServices.find(s => s.slug === selectedService);
+  const selectedServiceData = services.find(s => s.slug === selectedService);
 
   return (
     <div className="min-h-screen bg-background">
@@ -44,7 +45,7 @@ export default function NewOrderPage() {
           {/* Service Selection */}
           {!selectedService ? (
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {allServices.map((service, index) => {
+              {services.map((service, index) => {
                 const Icon = service.icon;
                 return (
                   <motion.button

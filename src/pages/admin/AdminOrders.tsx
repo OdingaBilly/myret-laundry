@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
 import { serviceLabels, statusColors, statusOptions } from '@/lib/services';
+import { useZones, useDrivers } from '@/hooks/useServices';
 import type { Database } from '@/integrations/supabase/types';
 import { motion } from 'framer-motion';
 
@@ -20,6 +21,8 @@ export default function AdminOrders() {
   const [uploadingPhoto, setUploadingPhoto] = useState<string | null>(null);
   const [updatingStatus, setUpdatingStatus] = useState<string | null>(null);
   const { toast } = useToast();
+  const { data: zones } = useZones({ includeInactive: true });
+  const { data: drivers } = useDrivers({ includeInactive: true });
 
   useEffect(() => {
     fetchOrders();
@@ -68,6 +71,14 @@ export default function AdminOrders() {
       toast({ title: 'Upload Failed', description: error.message, variant: 'destructive' });
     }
     setUploadingPhoto(null);
+  };
+
+  const updateOrderField = async (orderId: string, patch: Record<string, any>) => {
+    const { error } = await supabase.from('orders').update(patch).eq('id', orderId);
+    if (error) return toast({ title: 'Update failed', description: error.message, variant: 'destructive' });
+    toast({ title: 'Order updated' });
+    fetchOrders();
+    setSelectedOrder((prev) => (prev && prev.id === orderId ? { ...prev, ...patch } : prev));
   };
 
   const filteredOrders = orders.filter(order => {
@@ -239,6 +250,57 @@ export default function AdminOrders() {
                   {selectedOrder.store_photo_url && <div><p className="text-xs text-muted-foreground mb-1">Store Photo</p><img src={selectedOrder.store_photo_url} alt="Store" className="w-full aspect-square rounded-lg object-cover" /></div>}
                 </div>
               )}
+
+              <div className="border-t pt-3 mt-3 space-y-3">
+                <p className="text-sm font-semibold">Dispatch</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Service zone</p>
+                    <select
+                      value={(selectedOrder as any).zone_id ?? ''}
+                      onChange={(e) => updateOrderField(selectedOrder.id, { zone_id: e.target.value || null })}
+                      className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
+                    >
+                      <option value="">— No zone —</option>
+                      {zones?.map((z) => <option key={z.id} value={z.id}>{z.name}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Assigned driver</p>
+                    <select
+                      value={(selectedOrder as any).driver_id ?? ''}
+                      onChange={(e) => updateOrderField(selectedOrder.id, { driver_id: e.target.value || null })}
+                      className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm"
+                    >
+                      <option value="">— Unassigned —</option>
+                      {drivers?.map((d) => <option key={d.id} value={d.id}>{d.name} ({d.phone})</option>)}
+                    </select>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Pickup fee</p>
+                    <input type="number" defaultValue={(selectedOrder as any).pickup_fee ?? ''} onBlur={(e) => updateOrderField(selectedOrder.id, { pickup_fee: e.target.value ? Number(e.target.value) : null })} className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Delivery fee</p>
+                    <input type="number" defaultValue={(selectedOrder as any).delivery_fee ?? ''} onBlur={(e) => updateOrderField(selectedOrder.id, { delivery_fee: e.target.value ? Number(e.target.value) : null })} className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground mb-1">Final price</p>
+                    <input type="number" defaultValue={selectedOrder.final_price ?? ''} onBlur={(e) => updateOrderField(selectedOrder.id, { final_price: e.target.value ? Number(e.target.value) : null })} className="h-9 w-full rounded-md border border-input bg-background px-2 text-sm" />
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground mb-1">Dispatch notes</p>
+                  <textarea
+                    defaultValue={(selectedOrder as any).dispatch_notes ?? ''}
+                    onBlur={(e) => updateOrderField(selectedOrder.id, { dispatch_notes: e.target.value || null })}
+                    className="w-full rounded-md border border-input bg-background px-2 py-1.5 text-sm min-h-[60px]"
+                    placeholder="Internal notes for the driver…"
+                  />
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>

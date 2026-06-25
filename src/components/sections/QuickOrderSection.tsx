@@ -3,12 +3,13 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Package, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/contexts/AuthContext';
-import { allServices } from '@/lib/services';
+import { useServices } from '@/hooks/useServices';
 import laundryColorfulTowels from '@/assets/laundry-colorful-towels.jpg';
 
 export function QuickOrderSection() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { services } = useServices();
 
   const handleServiceClick = (slug: string) => {
     navigate(`/order/new?service=${slug}`);
@@ -57,7 +58,7 @@ export function QuickOrderSection() {
 
             {/* Quick service buttons */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              {allServices.map((service, index) => {
+              {services.map((service, index) => {
                 const Icon = service.icon;
                 return (
                   <motion.button

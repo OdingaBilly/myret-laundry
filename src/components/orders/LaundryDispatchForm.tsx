@@ -16,6 +16,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { useZones, useService } from '@/hooks/useServices';
 import type { Database } from '@/integrations/supabase/types';
 
 type LaundryService = Database['public']['Enums']['laundry_service'];
@@ -33,6 +34,7 @@ const orderSchema = z.object({
   returnDate: z.string().min(1, 'Return date is required'),
   deliveryOption: z.enum(['self_deliver', 'pickup_requested']),
   returnOption: z.enum(['self_pickup', 'delivery_requested']),
+  zoneId: z.string().optional(),
 });
 
 type OrderFormData = z.infer<typeof orderSchema>;
@@ -56,6 +58,8 @@ export function LaundryDispatchForm({
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user } = useAuth();
+  const { data: zones } = useZones();
+  const { service } = useService(serviceType);
 
   const {
     register,
@@ -73,6 +77,11 @@ export function LaundryDispatchForm({
 
   const deliveryOption = watch('deliveryOption');
   const returnOption = watch('returnOption');
+  const zoneId = watch('zoneId');
+  const selectedZone = zones?.find((z) => z.id === zoneId);
+  const pickupFee = deliveryOption === 'pickup_requested' && selectedZone ? Number(selectedZone.pickup_fee) : 0;
+  const deliveryFee = returnOption === 'delivery_requested' && selectedZone ? Number(selectedZone.delivery_fee) : 0;
+  const estimatedPrice = (service?.basePrice ?? 0) + pickupFee + deliveryFee;
 
   const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -138,6 +147,10 @@ export function LaundryDispatchForm({
         delivery_option: data.deliveryOption as DeliveryOption,
         return_option: data.returnOption as ReturnOption,
         customer_photo_url: customerPhotoUrl,
+        zone_id: data.zoneId || null,
+        pickup_fee: pickupFee || null,
+        delivery_fee: deliveryFee || null,
+        estimated_price: estimatedPrice || null,
       });
 
       if (orderError) throw orderError;
@@ -423,6 +436,35 @@ export function LaundryDispatchForm({
             <p className="text-xs text-destructive">{errors.returnDate.message}</p>
           )}
         </div>
+
+        {/* Service area / zone */}
+        {(deliveryOption === 'pickup_requested' || returnOption === 'delivery_requested') && zones && zones.length > 0 && (
+          <div className="space-y-2">
+            <Label htmlFor="zoneId">Service area</Label>
+            <select
+              {...register('zoneId')}
+              id="zoneId"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+            >
+              <option value="">Select your area</option>
+              {zones.map((z) => (
+                <option key={z.id} value={z.id}>
+                  {z.name} — pickup KES {Number(z.pickup_fee).toLocaleString()} / delivery KES {Number(z.delivery_fee).toLocaleString()}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Price preview */}
+        {service && (
+          <div className="rounded-lg border border-border bg-muted/40 p-3 text-sm space-y-1">
+            <div className="flex justify-between"><span className="text-muted-foreground">{service.name}</span><span>KES {service.basePrice.toLocaleString()}</span></div>
+            {pickupFee > 0 && <div className="flex justify-between"><span className="text-muted-foreground">Pickup ({selectedZone?.name})</span><span>KES {pickupFee.toLocaleString()}</span></div>}
+            {deliveryFee > 0 && <div className="flex justify-between"><span className="text-muted-foreground">Delivery ({selectedZone?.name})</span><span>KES {deliveryFee.toLocaleString()}</span></div>}
+            <div className="flex justify-between font-semibold border-t border-border pt-1 mt-1"><span>Estimated total</span><span>KES {estimatedPrice.toLocaleString()}</span></div>
+          </div>
+        )}
 
         <Button type="submit" variant="hero" className="w-full" disabled={isLoading}>
           {isLoading ? (

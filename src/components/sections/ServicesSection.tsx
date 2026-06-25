@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { allServices } from "@/lib/services";
+import { useServices } from "@/hooks/useServices";
 import laundryWaterSplash from "@/assets/laundry-water-splash.jpg";
 
 const containerVariants = {
@@ -14,6 +14,7 @@ const itemVariants = {
 };
 
 export function ServicesSection() {
+  const { services } = useServices();
   return (
     <section id="services" className="py-12 md:py-20 lg:py-24 relative bg-background overflow-hidden">
       <div className="container mx-auto px-4 md:px-6">
@@ -53,7 +54,7 @@ export function ServicesSection() {
           viewport={{ once: true, margin: "-30px" }}
           className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-5"
         >
-          {allServices.map((service) => {
+          {services.map((service) => {
             const Icon = service.icon;
             return (
               <motion.div key={service.slug} variants={itemVariants}>
