@@ -466,7 +466,7 @@ export function LaundryDispatchForm({
           </div>
         )}
 
-
+        <Button type="submit" variant="hero" className="w-full" disabled={isLoading}>
           {isLoading ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin mr-2" />
