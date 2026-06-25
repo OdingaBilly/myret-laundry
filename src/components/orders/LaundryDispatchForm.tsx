@@ -437,7 +437,36 @@ export function LaundryDispatchForm({
           )}
         </div>
 
-        <Button type="submit" variant="hero" className="w-full" disabled={isLoading}>
+        {/* Service area / zone */}
+        {(deliveryOption === 'pickup_requested' || returnOption === 'delivery_requested') && zones && zones.length > 0 && (
+          <div className="space-y-2">
+            <Label htmlFor="zoneId">Service area</Label>
+            <select
+              {...register('zoneId')}
+              id="zoneId"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
+            >
+              <option value="">Select your area</option>
+              {zones.map((z) => (
+                <option key={z.id} value={z.id}>
+                  {z.name} — pickup KES {Number(z.pickup_fee).toLocaleString()} / delivery KES {Number(z.delivery_fee).toLocaleString()}
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
+
+        {/* Price preview */}
+        {service && (
+          <div className="rounded-lg border border-border bg-muted/40 p-3 text-sm space-y-1">
+            <div className="flex justify-between"><span className="text-muted-foreground">{service.name}</span><span>KES {service.basePrice.toLocaleString()}</span></div>
+            {pickupFee > 0 && <div className="flex justify-between"><span className="text-muted-foreground">Pickup ({selectedZone?.name})</span><span>KES {pickupFee.toLocaleString()}</span></div>}
+            {deliveryFee > 0 && <div className="flex justify-between"><span className="text-muted-foreground">Delivery ({selectedZone?.name})</span><span>KES {deliveryFee.toLocaleString()}</span></div>}
+            <div className="flex justify-between font-semibold border-t border-border pt-1 mt-1"><span>Estimated total</span><span>KES {estimatedPrice.toLocaleString()}</span></div>
+          </div>
+        )}
+
+
           {isLoading ? (
             <>
               <Loader2 className="w-4 h-4 animate-spin mr-2" />
