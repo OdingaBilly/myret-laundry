@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Navigation } from "@/components/layout/Navigation";
 import { FooterSection } from "@/components/sections/FooterSection";
 import { LaundryDispatchForm } from "@/components/orders/LaundryDispatchForm";
-import { allServices } from "@/lib/services";
+import { useService } from "@/hooks/useServices";
 import laundryWaterSplash from "@/assets/laundry-water-splash.jpg";
 import laundryColorfulTowels from "@/assets/laundry-colorful-towels.jpg";
 import type { Database } from "@/integrations/supabase/types";
@@ -29,7 +29,11 @@ export default function ServicePage() {
   const { slug } = useParams<{ slug: string }>();
   const [showOrderForm, setShowOrderForm] = useState(false);
   const navigate = useNavigate();
-  const service = allServices.find(s => s.slug === slug);
+  const { service, isLoading } = useService(slug);
+
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center"><div className="animate-pulse text-muted-foreground">Loading…</div></div>;
+  }
 
   if (!service) {
     return (
